@@ -47,7 +47,7 @@ function find_item($dir,$pat,&$list,$recur) {	// find items
 		if(!get_show_item($dir, $new_item)) continue;
 
 		// match?
-		if(@eregi($pat,$new_item)) $list[]=array($dir,$new_item);
+		if(@preg_match('/' . $pat . '/i',$new_item)) $list[]=array($dir,$new_item);
 
 		// search sub-directories
 		if(get_is_dir($dir, $new_item) && $recur) {
@@ -60,9 +60,13 @@ function find_item($dir,$pat,&$list,$recur) {	// find items
 //------------------------------------------------------------------------------
 function make_list($dir,$item,$subdir) {	// make list of found items
 	// convert shell-wildcards to PCRE Regex Syntax
-	$pat="^".str_replace("?",".",str_replace("*",".*",str_replace(".","\.",$item)))."$";
+	if ($item === null || $item === "") {
+		return array();
+	}
+	$pat="^".str_replace("?",".",str_replace("*",".*",str_replace(".","\\.",$item)))."$";
 
 	// search
+	$list = array();
 	find_item($dir,$pat,$list,$subdir);
 	if(is_array($list)) sort($list);
 	return $list;
@@ -114,7 +118,7 @@ function search_items($dir) {			// search for item
 	// Search Box
 	echo "<BR><TABLE><FORM name=\"searchform\" action=\"".make_link("search",$dir,NULL);
 	echo "\" method=\"post\">\n<TR><TD><INPUT name=\"searchitem\" type=\"text\" size=\"25\" value=\"";
-	echo htmlspecialchars($searchitem)."\"><INPUT type=\"submit\" value=\"".$GLOBALS["messages"]["btnsearch"];
+	echo htmlspecialchars($searchitem !== NULL ? $searchitem : "")."\"><INPUT type=\"submit\" value=\"".$GLOBALS["messages"]["btnsearch"];
 	echo "\">&nbsp;<input type=\"button\" value=\"".$GLOBALS["messages"]["btnclose"];
 	echo "\" onClick=\"javascript:location='".make_link("list",$dir,NULL);
 	echo "';\"></TD></TR><TR><TD><INPUT type=\"checkbox\" name=\"subdir\" value=\"y\"";
@@ -123,7 +127,7 @@ function search_items($dir) {			// search for item
 	// Results
 	if($searchitem!=NULL) {
 		echo "<TABLE width=\"95%\"><TR><TD colspan=\"2\"><HR></TD></TR>\n";
-		if(count($list)>0) {
+		if(is_array($list) && count($list)>0) {
 			// Table Header
 			echo "<TR>\n<TD WIDTH=\"42%\" class=\"header\"><B>".$GLOBALS["messages"]["nameheader"];
 			echo "</B></TD>\n<TD WIDTH=\"58%\" class=\"header\"><B>".$GLOBALS["messages"]["pathheader"];

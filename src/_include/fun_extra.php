@@ -72,13 +72,13 @@ function parse_file_perms($mode) {		// parsed file permisions
 	$parsed_mode="";
 	for($i=0;$i<3;$i++) {
 		// read
-		if(($mode{$i} & 04)) $parsed_mode .= "r";
+		if(($mode[$i] & 04)) $parsed_mode .= "r";
 		else $parsed_mode .= "-";
 		// write
-		if(($mode{$i} & 02)) $parsed_mode .= "w";
+		if(($mode[$i] & 02)) $parsed_mode .= "w";
 		else $parsed_mode .= "-";
 		// execute
-		if(($mode{$i} & 01)) $parsed_mode .= "x";
+		if(($mode[$i] & 01)) $parsed_mode .= "x";
 		else $parsed_mode .= "-";
 	}
 	return $parsed_mode;
@@ -115,18 +115,18 @@ function parse_file_date($date) {		// parsed file date
 //------------------------------------------------------------------------------
 function get_is_image($dir, $item) {		// is this file an image?
 	if(!get_is_file($dir, $item)) return false;
-	return @eregi($GLOBALS["images_ext"], $item);
+	return @preg_match('/' . $GLOBALS["images_ext"] . '/i', $item);
 }
 //-----------------------------------------------------------------------------
 function get_is_editable($dir, $item) {		// is this file editable?
 	if(!get_is_file($dir, $item)) return false;
-	foreach($GLOBALS["editable_ext"] as $pat) if(@eregi($pat,$item)) return true;
+	foreach($GLOBALS["editable_ext"] as $pat) if(@preg_match('/' . $pat . '/i',$item)) return true;
 	return false;
 }
 //-----------------------------------------------------------------------------
 function get_is_unzipable($dir, $item) {		// is this file editable?
 	if(!get_is_file($dir, $item)) return false;
-	foreach($GLOBALS["unzipable_ext"] as $pat) if(@eregi($pat,$item)) return true;
+	foreach($GLOBALS["unzipable_ext"] as $pat) if(@preg_match('/' . $pat . '/i',$item)) return true;
 	return false;
 }
 
@@ -135,8 +135,8 @@ function _get_used_mime_info ($item)
     foreach ($GLOBALS["used_mime_types"] as $mime)
     {
         list($desc, $img, $ext, $type) = $mime;
-        if (@eregi($ext, $item))
-		return array($mime, $img, $type);
+        if (@preg_match('/' . $ext . '/i', $item))
+		return array($desc, $img, $type);
     }
 
     return array(NULL, NULL, NULL);
@@ -167,7 +167,7 @@ function get_mime_type ($dir, $item, $query = 'type')
             }
 
             if ((function_exists("is_executable") && @is_executable(get_abs_item($dir,$item)))
-            || @eregi($GLOBALS["super_mimes"]["exe"][2], $item))
+            || @preg_match('/' . $GLOBALS["super_mimes"]["exe"][2] . '/i', $item))
             {
                 $mime_type	= $GLOBALS["super_mimes"]["exe"][0];
                 $image		= $GLOBALS["super_mimes"]["exe"][1];
@@ -296,13 +296,13 @@ function remove ( $item )
 //------------------------------------------------------------------------------
 function get_max_file_size() {			// get php max_upload_file_size
 	$max = get_cfg_var("upload_max_filesize");
-	if(@eregi("G$",$max)) {
+	if(@preg_match('/G$/i',$max)) {
 		$max = substr($max,0,-1);
 		$max = round($max*1073741824);
-	} elseif(@eregi("M$",$max)) {
+	} elseif(@preg_match('/M$/i',$max)) {
 		$max = substr($max,0,-1);
 		$max = round($max*1048576);
-	} elseif(@eregi("K$",$max)) {
+	} elseif(@preg_match('/K$/i',$max)) {
 		$max = substr($max,0,-1);
 		$max = round($max*1024);
 	}
@@ -315,7 +315,7 @@ function down_home($abs_dir) {			// dir deeper than home?
 	$real_dir = @realpath($abs_dir);
 
 	if($real_home===false || $real_dir===false) {
-		if(@eregi("\\.\\.",$abs_dir)) return false;
+		if(@preg_match('/\\.\\./i',$abs_dir)) return false;
 	} else if(strcmp($real_home,@substr($real_dir,0,strlen($real_home)))) {
 		return false;
 	}
