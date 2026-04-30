@@ -3,20 +3,10 @@
 require_once "_include/error.php";
 
 _debug("Initializing ---------------------------------------------------");
-if(isset($_SERVER)) {
-	$GLOBALS['__GET']	=&$_GET;
-	$GLOBALS['__POST']	=&$_POST;
-	$GLOBALS['__SERVER']	=&$_SERVER;
-	$GLOBALS['__FILES']	=&$_FILES;
-} elseif(isset($HTTP_SERVER_VARS)) {
-	$GLOBALS['__GET']	=&$HTTP_GET_VARS;
-	$GLOBALS['__POST']	=&$HTTP_POST_VARS;
-	$GLOBALS['__SERVER']	=&$HTTP_SERVER_VARS;
-	$GLOBALS['__FILES']	=&$HTTP_POST_FILES;
-} else {
-	die("<B>ERROR: Your PHP version is too old</B><BR>".
-	"You need at least PHP 4.0.0 to run QuiXplorer; preferably PHP 4.3.1 or higher.");
-}
+$GLOBALS['__GET']    =&$_GET;
+$GLOBALS['__POST']   =&$_POST;
+$GLOBALS['__SERVER'] =&$_SERVER;
+$GLOBALS['__FILES']  =&$_FILES;
 
 _debug("xxx3 action: " . (isset($GLOBALS['__GET']["action"]) ? $GLOBALS['__GET']["action"] : "") . "/" . (isset($GLOBALS["__GET"]["do_action"]) ? $GLOBALS["__GET"]["do_action"] : "") . "/" . (isset($GLOBALS['__GET']['action']) ? "true" : "false"));
 if (isset($GLOBALS['__GET']["action"]))
@@ -48,6 +38,8 @@ if($GLOBALS["srt"]=="") $GLOBALS["srt"]=="yes";
 
 // Necessary files
 ob_start(); // prevent unwanted output
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
 date_default_timezone_set ( "UTC" );
 if (!is_readable("./_config/conf.php"))
     show_error("./_config/conf.php not found.. please see installation instructions");

@@ -298,7 +298,7 @@ function remove ( $item )
 }
 //------------------------------------------------------------------------------
 function get_max_file_size() {			// get php max_upload_file_size
-	$max = get_cfg_var("upload_max_filesize");
+	$max = ini_get("upload_max_filesize");
 	if(@preg_match('/G$/i',$max)) {
 		$max = substr($max,0,-1);
 		$max = round($max*1073741824);

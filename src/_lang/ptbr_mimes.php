@@ -1,12 +1,12 @@
 <?php
 
-// Português - Brasil Language Module for v2.3 (translated by Diego Dmitruk Maturana (dmitruk@gmail.com) )
+// PortuguÃªs - Brasil Language Module for v2.3 (translated by Diego Dmitruk Maturana (dmitruk@gmail.com) )
 // Download DlmNet - http://www.dlmnet.com.br/quixplorer/trans_ptbr.zip
 
 $GLOBALS["mimes"]=array(
 	// dir, exe, file
 	"dir"	=> "Pasta",
-	"exe"	=> "Arquivo executável",
+	"exe"	=> "Arquivo executÃ¡vel",
 	"file"	=> "Arquivo",
 
 	// text
@@ -16,7 +16,7 @@ $GLOBALS["mimes"]=array(
 	"php"	=> "PHP Script",
 	"sql"	=> "Arquivo SQL",
 	"perl"	=> "PERL Script",
-	"html"	=> "Página HTML",
+	"html"	=> "PÃ¡gina HTML",
 	"js"	=> "Javascript",
 	"css"	=> "CSS File",
 	"cgi"	=> "CGI Script",

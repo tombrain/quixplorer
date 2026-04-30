@@ -370,7 +370,7 @@ function list_dir ( $dir )
 	// print number of items & total filesize
 	echo "<TR><TD colspan=\"7\"><HR></TD></TR><TR>\n<TD class=\"header\"></TD>";
 	echo "<TD class=\"header\">".$num_items." ".$GLOBALS["messages"]["miscitems"]." (";
-    $free=parse_file_size(diskfreespace("/"));
+    $free=parse_file_size(disk_free_space("/"));
 	echo $GLOBALS["messages"]["miscfree"].": ".$free.")</TD>\n";
 	echo "<TD class=\"header\">".parse_file_size($tot_file_size)."</TD>\n";
 
@@ -428,7 +428,7 @@ function _print_edit_buttons ($dir)
 	_print_link("copy", permissions_grant_all($dir, NULL, array("create", "read")), $dir, NULL);
 	_print_link("move", permissions_grant($dir, NULL, "change"), $dir, NULL);
 	_print_link("delete", permissions_grant($dir, NULL, "delete"), $dir, NULL);
-	_print_link("upload", permissions_grant($dir, NULL, "create") && get_cfg_var("file_uploads"), $dir, NULL);
+	_print_link("upload", permissions_grant($dir, NULL, "create") && ini_get("file_uploads"), $dir, NULL);
 	_print_link("archive",
 		permissions_grant_all($dir, NULL, array("create", "read"))
 			&& ($GLOBALS["zip"] || $GLOBALS["tar"] || $GLOBALS["tgz"]),

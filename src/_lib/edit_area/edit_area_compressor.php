@@ -142,13 +142,15 @@
 			$loader= $this->get_content("edit_area_loader.js")."\n";
 			
 			// get the list of other files to load
-	    	$loader= preg_replace("/(t\.scripts_to_load=\s*)\[([^\]]*)\];/e"
-						, "\$this->replace_scripts('script_list', '\\1', '\\2')"
-						, $loader);
+	    	$loader= preg_replace_callback(
+						"/(t\.scripts_to_load=\s*)\[([^\]]*)\];/",
+						function($m) { return $this->replace_scripts('script_list', $m[1], $m[2]); },
+						$loader);
 		
-			$loader= preg_replace("/(t\.sub_scripts_to_load=\s*)\[([^\]]*)\];/e"
-						, "\$this->replace_scripts('sub_script_list', '\\1', '\\2')"
-						, $loader);
+			$loader= preg_replace_callback(
+						"/(t\.sub_scripts_to_load=\s*)\[([^\]]*)\];/",
+						function($m) { return $this->replace_scripts('sub_script_list', $m[1], $m[2]); },
+						$loader);
 
 			// replace languages names
 			$reg_path= $this->path."reg_syntax/";

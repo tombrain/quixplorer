@@ -17,16 +17,16 @@ $GLOBALS["mimes"]=array(
 	"perl"	=> "Skrypt PERL-a",
 	"html"	=> "Strona HTML",
 	"js"	=> "Skrypt Javascript",
-	"css"	=> "Plik arkusza stylów CSS",
+	"css"	=> "Plik arkusza stylÃ³w CSS",
 	"cgi"	=> "Skrypt CGI",
 	// C++
-	"cpps"	=> "Plik ¼ród³owy C++",
-	"cpph"	=> "Plik nag³ówkowy C++",
+	"cpps"	=> "Plik Â¼rÃ³dÂ³owy C++",
+	"cpph"	=> "Plik nagÂ³Ã³wkowy C++",
 	// Java
-	"javas"	=> "Plik ¼ród³owy Java",
+	"javas"	=> "Plik Â¼rÃ³dÂ³owy Java",
 	"javac"	=> "Plik Klasy Java",
 	// Pascal
-	"pas"	=> "Plik zród³owy PASCAL",
+	"pas"	=> "Plik zrÃ³dÂ³owy PASCAL",
 
 	// images
 	"gif"	=> "Obraz GIF",

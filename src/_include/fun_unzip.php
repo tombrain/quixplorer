@@ -74,7 +74,7 @@ function dir_print($dir_list, $new_dir) {	// print list of directories
 	
 	// Print List Of Target Directories
 	if(!is_array($dir_list)) return;
-	while(list($new_item,) = each($dir_list)) {
+	foreach($dir_list as $new_item => $unused) {
 		$s_item=$new_item;	if(strlen($s_item)>40) $s_item=substr($s_item,0,37)."...";
 		echo "<TR><TD><A HREF=\"javascript:NewDir('".addslashes(get_rel_item($new_dir,$new_item)).
 			"');\"><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" ".

@@ -4,59 +4,59 @@
 
 $GLOBALS["mimes"]=array(
       // dir, exe, file
-      "dir"      => "Äèðåêòîðèÿ",
-      "exe"      => "Èñïîëíÿåìûé ôàéë",
-      "file"      => "Ôàéë",
+      "dir"      => "Ã„Ã¨Ã°Ã¥ÃªÃ²Ã®Ã°Ã¨Ã¿",
+      "exe"      => "ÃˆÃ±Ã¯Ã®Ã«Ã­Ã¿Ã¥Ã¬Ã»Ã© Ã´Ã Ã©Ã«",
+      "file"      => "Ã”Ã Ã©Ã«",
 
       // text
-      "text"      => "Òåêñòîâûé ôàéë",
+      "text"      => "Ã’Ã¥ÃªÃ±Ã²Ã®Ã¢Ã»Ã© Ã´Ã Ã©Ã«",
 
       // programming
-      "php"      => "PHP ñêðèïò",
-      "sql"      => "ôàéë SQL",
-      "perl"      => "PERL ñêðèïò",
-      "html"      => "ñòðàíèöà HTML",
-      "js"      => "ôàéë Javascript",
-      "css"      => "CSS ñòèëü",
-      "cgi"      => "CGI ñêðèïò",
+      "php"      => "PHP Ã±ÃªÃ°Ã¨Ã¯Ã²",
+      "sql"      => "Ã´Ã Ã©Ã« SQL",
+      "perl"      => "PERL Ã±ÃªÃ°Ã¨Ã¯Ã²",
+      "html"      => "Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã  HTML",
+      "js"      => "Ã´Ã Ã©Ã« Javascript",
+      "css"      => "CSS Ã±Ã²Ã¨Ã«Ã¼",
+      "cgi"      => "CGI Ã±ÃªÃ°Ã¨Ã¯Ã²",
       // C++
-      "cpps"      => "èñõîäíûé êîä C++",
-      "cpph"      => "çàãîëîâîê êîäà C++",
+      "cpps"      => "Ã¨Ã±ÃµÃ®Ã¤Ã­Ã»Ã© ÃªÃ®Ã¤ C++",
+      "cpph"      => "Ã§Ã Ã£Ã®Ã«Ã®Ã¢Ã®Ãª ÃªÃ®Ã¤Ã  C++",
       // Java
-      "javas"      => "èñõîäíûé êîä Java",
-      "javac"      => "èñõîäíûé êîä Java class",
+      "javas"      => "Ã¨Ã±ÃµÃ®Ã¤Ã­Ã»Ã© ÃªÃ®Ã¤ Java",
+      "javac"      => "Ã¨Ã±ÃµÃ®Ã¤Ã­Ã»Ã© ÃªÃ®Ã¤ Java class",
       // Pascal
-      "pas"      => "ôàéë Pascal",
+      "pas"      => "Ã´Ã Ã©Ã« Pascal",
 
       // images
-      "gif"      => "èçîáðàæåíèå GIF",
-      "jpg"      => "èçîáðàæåíèå JPG",
-      "bmp"      => "èçîáðàæåíèå BMP",
-      "png"      => "èçîáðàæåíèå PNG",
+      "gif"      => "Ã¨Ã§Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¥ GIF",
+      "jpg"      => "Ã¨Ã§Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¥ JPG",
+      "bmp"      => "Ã¨Ã§Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¥ BMP",
+      "png"      => "Ã¨Ã§Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¥ PNG",
 
       // compressed
-      "zip"      => "àðõèâ ZIP",
-      "tar"      => "àðõèâ TAR",
-      "gzip"      => "àðõèâ GZIP",
-      "bzip2"      => "àðõèâ BZIP2e",
-      "rar"      => "àðõèâ RAR",
+      "zip"      => "Ã Ã°ÃµÃ¨Ã¢ ZIP",
+      "tar"      => "Ã Ã°ÃµÃ¨Ã¢ TAR",
+      "gzip"      => "Ã Ã°ÃµÃ¨Ã¢ GZIP",
+      "bzip2"      => "Ã Ã°ÃµÃ¨Ã¢ BZIP2e",
+      "rar"      => "Ã Ã°ÃµÃ¨Ã¢ RAR",
 
       // music
-      "mp3"      => "ôàéë MP3",
-      "wav"      => "ôàéë WAV",
-      "midi"      => "ôàéë MIDI",
-      "real"      => "ôàéë RealAudio",
+      "mp3"      => "Ã´Ã Ã©Ã« MP3",
+      "wav"      => "Ã´Ã Ã©Ã« WAV",
+      "midi"      => "Ã´Ã Ã©Ã« MIDI",
+      "real"      => "Ã´Ã Ã©Ã« RealAudio",
 
       // movie
-      "mpg"      => "âèäåî-ôàéë MPG",
-      "mov"      => "âèäåî-ôàéë Movie",
-      "avi"      => "âèäåî-ôàéë AVI",
-      "flash"      => "Flash ôàéë",
+      "mpg"      => "Ã¢Ã¨Ã¤Ã¥Ã®-Ã´Ã Ã©Ã« MPG",
+      "mov"      => "Ã¢Ã¨Ã¤Ã¥Ã®-Ã´Ã Ã©Ã« Movie",
+      "avi"      => "Ã¢Ã¨Ã¤Ã¥Ã®-Ã´Ã Ã©Ã« AVI",
+      "flash"      => "Flash Ã´Ã Ã©Ã«",
 
       // Micosoft / Adobe
-      "word"      => "äîêóìåíò Word",
-      "excel"      => "äîêóìåíò Excel",
-      "pdf"      => "ôàéë PDF",
+      "word"      => "Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Word",
+      "excel"      => "Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Excel",
+      "pdf"      => "Ã´Ã Ã©Ã« PDF",
 	"xml"	=> "XML File",
 	"c"		=> "C File",
 	"psd"	=> "Photoshop File",
