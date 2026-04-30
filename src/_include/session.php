@@ -31,5 +31,4 @@ function matches_noaccess_pattern($file)
 	return preg_match( "%" . preg_quote($no_access, '%') . "%", $file );
 }
 
-
 ?>

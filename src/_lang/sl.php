@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 
 // English Language Module for v2.3 (translated by the QuiX project)
 
@@ -18,10 +18,10 @@ $GLOBALS["error_msg"] = array(
 	// exist
 	"direxist"		=> "Ta mapa ne obstaja.",
 	"fileexist"		=> "Ta datoteka ne obstaja.",
-	"itemdoesexist"		=> "Ta element Å¾e obstaja.",
+	"itemdoesexist"		=> "Ta element že obstaja.",
 	"itemexist"		=> "Ta element ne obstaja.",
 	"targetexist"		=> "Ciljna mapa ne obstaja.",
-	"targetdoesexist"	=> "Ciljni element Å¾e obstaja.",
+	"targetdoesexist"	=> "Ciljni element že obstaja.",
 
 	// open
 	"opendir"		=> "Ne morem odpreti mape.",
@@ -49,7 +49,7 @@ $GLOBALS["error_msg"] = array(
 	"deluser"		=> "Removing user failed.",
 	"adduser"		=> "Adding user failed.",
 	"saveuser"		=> "Saving user failed.",
-	"searchnothing"		=> "Vnesti moraÅ¡ nekaj, kar se da iskati...",
+	"searchnothing"		=> "Vnesti moraš nekaj, kar se da iskati...",
 
 	// misc
 	"miscnofunc"		=> "Function unavailable.",
@@ -57,7 +57,7 @@ $GLOBALS["error_msg"] = array(
 	"miscfilepart"		=> "File was only partially uploaded.",
 	"miscnoname"		=> "Ime mora biti podano.",
 	"miscselitems"		=> "Noben element ni bil izbran.",
-	"miscdelitems"		=> "ResniÄno Å¾eliÅ¡ brisati ( \"+num+\" ) element(e)?",
+	"miscdelitems"		=> "Resnicno želiš brisati ( \"+num+\" ) element(e)?",
 	"miscdeluser"		=> "Are you sure you want to delete user '\"+user+\"'?",
 	"miscnopassdiff"	=> "Novo geslo se ne razlikuje od starega.",
 	"miscnopassmatch"	=> "Gesli se ne ujemata.",
@@ -74,15 +74,15 @@ $GLOBALS["messages"] = array(
 	"downlink"		=> "PRENESI",
 	"uplink"		=> "GOR",
 	"homelink"		=> "DOMOV",
-	"reloadlink"		=> "OSVEÅ½I",
+	"reloadlink"		=> "OSVEŽI",
 	"copylink"		=> "KOPIRAJ",
 	"movelink"		=> "PRESTAVI",
 	"dellink"		=> "ODSTRANI",
 	"comprlink"		=> "ARHIVIRAJ",
 	"adminlink"		=> "ADMIN",
 	"logoutlink"		=> "ODJAVA",
-	"uploadlink"		=> "NALOÅ½I",
-	"searchlink"		=> "IÅ ÄŒI",
+	"uploadlink"		=> "NALOŽI",
+	"searchlink"		=> "IŠCI",
 	"unziplink"			=> "RAZPAKIRAJ",
 
 	// list
@@ -95,14 +95,14 @@ $GLOBALS["messages"] = array(
 	"pathheader"		=> "Pot",
 
 	// buttons
-	"btncancel"		=> "PrekliÄi",
+	"btncancel"		=> "Preklici",
 	"btnsave"		=> "Shrani",
 	"btnchange"		=> "Spremeni",
 	"btnreset"		=> "Ponastavi",
 	"btnclose"		=> "Zapri",
 	"btncreate"		=> "Ustvari",
-	"btnsearch"		=> "IÅ¡Äi",
-	"btnupload"		=> "NaloÅ¾i",
+	"btnsearch"		=> "Išci",
+	"btnupload"		=> "Naloži",
 	"btncopy"		=> "Kopiraj",
 	"btnmove"		=> "Prestavi",
 	"btnlogin"		=> "Prijavi",
@@ -128,12 +128,12 @@ $GLOBALS["messages"] = array(
 	"actusers"		=> "Uporabniki",
 	"actarchive"		=> "Arhiviranje elementov",
 	"actunzipitem"		=> "Extracting : izberi ciljno mapo",
-	"actupload"		=> "NaloÅ¾i datotek(o/e)",
+	"actupload"		=> "Naloži datotek(o/e)",
 
 	// misc
 	"miscitems"		=> "Element(ov)",
 	"miscfree"		=> "Prosto",
-	"miscusername"		=> "UporabniÅ¡ko ime",
+	"miscusername"		=> "Uporabniško ime",
 	"miscpassword"		=> "Geslo",
 	"miscoldpass"		=> "Staro geslo",
 	"miscnewpass"		=> "Novo geslo",
@@ -151,7 +151,7 @@ $GLOBALS["messages"] = array(
 	"miscactive"		=> "Active",
 	"misclang"		=> "Jezik",
 	"miscnoresult"		=> "Ni rezultatov.",
-	"miscsubdirs"		=> "IÅ¡Äi v podmapah",
+	"miscsubdirs"		=> "Išci v podmapah",
 	"miscpermissions"	=> array(
 					"read"		=> array("Read", "User may read and download a file"),
 					"create" 	=> array("Write", "User may create a new file"),

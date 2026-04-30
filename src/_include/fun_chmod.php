@@ -69,7 +69,6 @@ function chmod_item($dir, $item)
 	
 	$s_item=get_rel_item($dir,$item);	if(strlen($s_item)>50) $s_item="...".substr($s_item,-47);
 	show_header($GLOBALS["messages"]["actperms"].": /".$s_item);
-	
 
 	// Form
 	echo "<BR><TABLE width=\"175\"><FORM method=\"post\" action=\"";

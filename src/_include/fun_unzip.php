@@ -98,7 +98,6 @@ function unzip_item($dir)
 	// Vars
 
 	$new_dir = ( isset($GLOBALS['__POST']["new_dir"]) ) ? $GLOBALS['__POST']["new_dir"] : $dir;
-	
 
 	$_img = $GLOBALS["baricons"]["unzip"];
 	
@@ -173,16 +172,14 @@ function unzip_item($dir)
 		echo "';\"></TD>\n</TR></FORM></TABLE><BR>\n";
 		return;
 	}
-	
-	
+
 	// DO COPY/MOVE
 	
 	// ALL OK?
 	if(!@file_exists(get_abs_dir($new_dir))) show_error(htmlspecialchars($new_dir).": ".$GLOBALS["error_msg"]["targetexist"]);
 	if(!get_show_item($new_dir,"")) show_error(htmlspecialchars($new_dir).": ".$GLOBALS["error_msg"]["accesstarget"]);
 	if(!down_home(get_abs_dir($new_dir))) show_error(htmlspecialchars($new_dir).": ".$GLOBALS["error_msg"]["targetabovehome"]);
-	
-	
+
 	// copy / move files
 	$err=false;
 	/*for($i=0;$i<$cnt;++$i) {

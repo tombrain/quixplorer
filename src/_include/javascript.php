@@ -60,8 +60,7 @@
 		}
 		return num;
 	}
-	
-	
+
 	// Row highlight
 
 	function Highlight(e) {
@@ -152,7 +151,6 @@
 		document.selform.do_action.value = "unzip";
 		document.selform.submit();
 	}
-	
 
 // -->
 </script>

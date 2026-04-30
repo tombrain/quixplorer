@@ -55,7 +55,9 @@ function make_tables($dir, &$dir_list, &$file_list, &$tot_file_size, &$num_items
         $tot_file_size += $new_file_size;
         $num_items++;
 
-        if (is_dir($dir.DIRECTORY_SEPARATOR.$new_item))
+		$fullpath = $dir . DIRECTORY_SEPARATOR . $new_item;
+
+        if (is_dir($fullpath))
         {
             if ($GLOBALS["order"] == "mod")
             {
@@ -139,7 +141,7 @@ function print_table ($dir, $list)
 	if (!is_array($list))
         return;
 
-	foreach ($list as $item)
+	foreach ($list as $item => $sort_value)
     {
 		// link to dir / file
 		$abs_item = get_abs_item($dir,$item);
@@ -148,7 +150,8 @@ function print_table ($dir, $list)
         {
 			$link = make_link("list", get_rel_item($dir, $item), NULL);
 		} else {
-			$link = make_link("download", $dir, $item);
+			$link = $GLOBALS["home_url"]."/".get_rel_item($dir, $item);
+// original			$link = make_link("download", $dir, $item);
 			$target = "_blank";
 		}
 
@@ -157,7 +160,7 @@ function print_table ($dir, $list)
 	// Icon + Link
 		echo "<TD nowrap>";
 		if (permissions_grant($dir, $item, "read"))
-			echo"<A HREF=\"" . $link . "\">";
+			echo"<A HREF=\"" . $link . "\" TARGET=\"".$target."\">";
 		//else echo "<A>";
 		echo "<IMG border=\"0\" width=\"16\" height=\"16\" ";
 		echo "align=\"ABSMIDDLE\" src=\"_img/".get_mime_type($dir, $item, "img")."\" ALT=\"\">&nbsp;";
@@ -199,8 +202,6 @@ function print_table ($dir, $list)
 				echo "src=\"".$GLOBALS["baricons"]["none"]."\" ALT=\"\"></TD>\n";
 			}
 		}
-
-
 
 		// DOWNLOAD
 		if(get_is_file($dir,$item))
@@ -289,7 +290,6 @@ function list_dir ( $dir )
 	echo "<TD>::</TD>";
 	//Languages
 
-
 	foreach($GLOBALS["langs"] as $langs) {
 
 		echo "<TD><A HREF=\"".make_link("list",$dir,NULL,NULL,NULL,$langs[0])."\">";
@@ -316,7 +316,6 @@ function list_dir ( $dir )
 
 		}
 
-
 	//
 
 	echo "</TR></TABLE></TD>\n";
@@ -337,7 +336,6 @@ function list_dir ( $dir )
 	echo "</TR></TABLE>\n";
 
 	// End Toolbar
-
 
 	// Begin Table + Form for checkboxes
 	echo"<TABLE WIDTH=\"95%\"><FORM name=\"selform\" method=\"POST\" action=\"".make_link("post",$dir,NULL)."\">\n";
@@ -391,6 +389,33 @@ function list_dir ( $dir )
 			e.checked=false;
 		}
 	}
+	
+	$("tr.rowdata")
+	.hover(
+		function () {
+			$(this).addClass("hover");
+		},
+		function () {
+			$(this).removeClass("hover");
+		}
+	)
+	/*.click(
+		function (event) {
+			if (event.target.nodeName === 'TD')
+				window.location = $(this).find("a:first").attr("href");
+		}
+	)*/
+	.click(
+		function(event) {
+			if (event.target.nodeName === 'TD')
+			{
+				a = $(this).find('input');
+				a.prop('checked', function() {
+					return !this.checked;
+				})
+			}
+		}
+	);
 // -->
 </script><?php
 }

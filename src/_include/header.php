@@ -60,6 +60,7 @@ function show_header($title, $additional_header_content = null)
 	echo "<link href=\"_lib/uploadify/uploadify.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
 
 	echo "<script type=\"text/javascript\" src=\"_lib/edit_area/edit_area_full.js\"></script>\n";
+	echo "<script type=\"text/javascript\" src=\"_lib/jquery/jquery.min.js\"></script>\n";
 
     if ($additional_header_content != null)
         echo $additional_header_content;

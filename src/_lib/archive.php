@@ -70,7 +70,6 @@ class extArchive {
 		return $result;
 	}
 
-
         /*	
 	function &getAdapter( $type ) {
 		static $adapters ;

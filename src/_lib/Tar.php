@@ -43,7 +43,6 @@ if( !class_exists('PEAR')) {
 	require_once 'PEAR.php';
 }
 
-
 define ('ARCHIVE_TAR_ATT_SEPARATOR', 90001);
 define ('ARCHIVE_TAR_END_BLOCK', pack("a512", ''));
 

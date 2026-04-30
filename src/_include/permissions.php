@@ -21,7 +21,6 @@ function permissions_get ()
 	return $perms;
 }
 
-
 /**
   The permission engine.
 

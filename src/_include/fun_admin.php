@@ -106,7 +106,6 @@ function admin($admin, $dir)
 </script><?php
 }
 
-
 /**
  * Change Password
  */
@@ -208,7 +207,6 @@ function adduser ($dir)
 // -->
 </script><?php
 }
-
 
 /**
  * edit user
@@ -390,7 +388,6 @@ function admin_print_permissions ($username)
 	}
 	echo "</TABLE>";
 }
-
 
 /**
   this function evaluates the changed permissions out of the html input form and convert this permissions

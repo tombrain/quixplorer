@@ -814,7 +814,6 @@ class PEAR_Error
     // }}}
     // {{{ getMessage()
 
-
     /**
      * Get the error message from an error object.
      *
@@ -825,7 +824,6 @@ class PEAR_Error
     {
         return ($this->error_message_prefix . $this->message);
     }
-
 
     // }}}
     // {{{ getCode()

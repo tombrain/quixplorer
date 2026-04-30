@@ -57,7 +57,6 @@ class extFile
 		return preg_replace($regex, '', $file);
 	}
 
-
 	/**
 	 * Read the contents of a file
 	 *
@@ -101,7 +100,6 @@ class extFile
 
 		return $data;
 	}
-
 
 	/**
 	 * Wrapper for the standard file_exists function

@@ -148,7 +148,10 @@ function _get_used_mime_info ($item)
 function get_mime_type ($dir, $item, $query = 'type')
 {
     _debug(_dump($dir, $item, $query));
-    switch (filetype(get_abs_item($dir, $item)))
+    $abs_item = get_abs_item($dir, $item);
+    $file_type = @filetype($abs_item);
+    
+    switch ($file_type)
     {
         case "dir":
             $mime_type	= $GLOBALS["super_mimes"]["dir"][0];

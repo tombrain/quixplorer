@@ -175,7 +175,6 @@ class extPath
 		return $path;
 	}
 
-
 	/**
 	 * Searches the directory paths for a given file.
 	 *

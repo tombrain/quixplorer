@@ -44,3 +44,7 @@ a:hover, a:active {
 	color: #778899;
 	text-decoration: none;
 }
+
+.hover {
+	background-color: #F2F5A9;
+}

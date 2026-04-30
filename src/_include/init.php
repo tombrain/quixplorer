@@ -34,7 +34,6 @@ if($GLOBALS["action"]=="") $GLOBALS["action"]="list";
 $GLOBALS["action"]=$GLOBALS["action"];
 _debug("xxx3 action: " . (isset($GLOBALS['__GET']["action"]) ? $GLOBALS['__GET']["action"] : "") . "/" . (isset($GLOBALS["__GET"]["do_action"]) ? $GLOBALS["__GET"]["do_action"] : "") . "/" . (isset($GLOBALS['__GET']['action']) ? "true" : "false"));
 
-
 // Get Item
 if(isset($GLOBALS['__GET']["item"])) $GLOBALS["item"]=$GLOBALS['__GET']["item"];
 else $GLOBALS["item"]="";

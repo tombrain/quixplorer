@@ -11,8 +11,7 @@
 		}
 		return true;
 	}
-	
-	
+
 	// Edit / Delete
 	
 	function Edit() {

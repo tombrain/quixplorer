@@ -19,8 +19,7 @@
 	$compressor= new Compressor($param);
 	
 	class Compressor{
-	
-		
+
 		function compressor($param)
 		{
 			$this->__construct($param);
@@ -222,12 +221,10 @@
 			$sub_scripts= preg_replace(array("/(\b)editAreaLoader(\b)/", "/(\b)editAreas(\b)/", "/(\b)editArea(\b)/", "/(\b)EditArea(\b)/"), array("eAL", "eAs", "eA", "EA"), $sub_scripts);
 		//	$sub_scripts= str_replace(array("editAreaLoader", "editAreas", "editArea", "EditArea"), array("eAL", "eAs", "eA", "EA"), $sub_scripts);
 			$sub_scripts.= "var editArea= eA;EditArea=EA;";
-			
-			
+
 			// add the scripts
 		//	$this->datas.= sprintf("editAreaLoader.iframe_script= \"<script type='text/javascript'>%s</script>\";\n", $sub_scripts);
-		
-		
+
 			// add the script and use a last compression 
 			if( $this->param['compress'] )
 			{
@@ -263,8 +260,7 @@
 			
 			if($this->load_all_plugins)
 				$this->datas.="editAreaLoader.all_plugins_loaded=true;\n";
-		
-			
+
 			// load the template
 			$this->datas.= sprintf("editAreaLoader.template= \"%s\";\n", $this->get_html_content("template.html"));
 			// load the css
@@ -312,8 +308,7 @@
 				
 //			die;
 		}
-				
-		
+
 		function get_content($end_uri)
 		{
 			$end_uri=preg_replace("/\.\./", "", $end_uri); // Remove any .. (security)

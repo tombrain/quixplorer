@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $GLOBALS["langs"] = array(
 	"english" => array("en","_img/smallicons/us.png","English"),
