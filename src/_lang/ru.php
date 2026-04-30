@@ -83,7 +83,7 @@ $GLOBALS["messages"] = array(
       "logoutlink"            => "ÂŰÉŇČ",
       "uploadlink"            => "ÇŔĘŔ×ŔŇÜ",
       "searchlink"            => "ĎÎČŃĘ",
-	  "unziplink"			=> "UNZIP",
+      "unziplink"            => "UNZIP",
 
       // list
       "nameheader"            => "Ôŕéë",
@@ -150,9 +150,13 @@ $GLOBALS["messages"] = array(
       "misclang"            => "ßçűę",
       "miscnoresult"            => "Íĺň đĺçóëüňŕňîâ",
       "miscsubdirs"            => "Čńęŕňü â ďîääčđĺęňîđč˙ő",
-      "miscpermnames"            => array("Ňîëüęî ďđîńěîňđ","Đĺäŕęňčđîâŕíčĺ","Ńěĺí˙ ďŕđîë˙","Ďđŕâęŕ č ńěĺíŕ ďŕđîë˙",
-                              "Ŕäěčíčńňđŕňîđ"),
-      "miscyesno"            => array("Äŕ","Íĺň","Ä","Í"),
+      "miscpermnames"            => array(
+            "Ňîëüęî ďđîńěîňđ",
+            "Đĺäŕęňčđîâŕíčĺ",
+            "Ńěĺí˙ ďŕđîë˙",
+            "Ďđŕâęŕ č ńěĺíŕ ďŕđîë˙",
+            "Ŕäěčíčńňđŕňîđ"
+      ),
+      "miscyesno"            => array("Äŕ", "Íĺň", "Ä", "Í"),
       "miscchmod"            => array("Âëŕäĺëĺö", "Ăđóďďŕ", "Číňĺđíĺň"),
 );
-?>

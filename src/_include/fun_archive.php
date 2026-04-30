@@ -27,15 +27,15 @@
 ------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------
 Author: The QuiX project
-	quix@free.fr
-	http://www.quix.tk
-	http://quixplorer.sourceforge.net
+    quix@free.fr
+    http://www.quix.tk
+    http://quixplorer.sourceforge.net
 
 Comment:
-	QuiXplorer Version 2.3
-	Zip, Tar & Gzip Functions
+    QuiXplorer Version 2.3
+    Zip, Tar & Gzip Functions
 
-	Have Fun...
+    Have Fun...
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //if($GLOBALS["tar"]) include("./_lib/lib_tar.php");
@@ -51,7 +51,7 @@ require_once("_lib/zipstream.php");
  **/
 function zip_selected_items($zipfilename, $directory, $items)
 {
-    $zipfile=new ZipArchive();
+    $zipfile = new ZipArchive();
     $zipfile->open($zipfilename, ZIPARCHIVE::CREATE);
     foreach ($items as $item)
     {
@@ -64,7 +64,7 @@ function zip_selected_items($zipfilename, $directory, $items)
 
     if (!$zipfile->close())
     {
-      show_error($zipfilename . ": Failed saving zipfile.");
+        show_error($zipfilename . ": Failed saving zipfile.");
     }
 }
 
@@ -76,7 +76,7 @@ function zip_items($dir, $name)
         $name .= ".zip";
     }
     zip_selected_items(get_abs_item($dir, $name), $dir, $items);
-	header("Location: " . make_link("list",$dir,NULL));
+    header("Location: " . make_link("list", $dir, NULL));
 }
 
 function zip_download($directory, $items)
@@ -91,11 +91,11 @@ function zip_download($directory, $items)
 
 function _zipstream_add_file($zipfile, $directory, $file_to_add)
 {
-    $filename = $directory.DIRECTORY_SEPARATOR.$file_to_add;
+    $filename = $directory . DIRECTORY_SEPARATOR . $file_to_add;
 
     if (!@file_exists($filename))
     {
-        show_error($filename." does not exist");
+        show_error($filename . " does not exist");
     }
 
     if (is_file($filename))
@@ -107,10 +107,10 @@ function _zipstream_add_file($zipfile, $directory, $file_to_add)
     if (is_dir($filename))
     {
         _debug("adding directory $filename");
-        $files = glob($filename.DIRECTORY_SEPARATOR."*");
+        $files = glob($filename . DIRECTORY_SEPARATOR . "*");
         foreach ($files as $file)
         {
-            $file = str_replace($directory.DIRECTORY_SEPARATOR, "", $file);
+            $file = str_replace($directory . DIRECTORY_SEPARATOR, "", $file);
             _zipstream_add_file($zipfile, $directory, $file);
         }
         return True;
@@ -120,57 +120,68 @@ function _zipstream_add_file($zipfile, $directory, $file_to_add)
     return False;
 }
 
-function tar_items($dir,$name) {
-	// ...
+function tar_items($dir, $name)
+{
+    // ...
 }
 //------------------------------------------------------------------------------
-function tgz_items($dir,$name) {
-	// ...
+function tgz_items($dir, $name)
+{
+    // ...
 }
 //------------------------------------------------------------------------------
 function archive_items($dir)
 {
-        include_once "./_include/permissions.php";
-	// archive is only allowed if user may change files
-	if (!permissions_grant($dir, NULL, "change"))
-		show_error($GLOBALS["error_msg"]["accessfunc"]);
+    include_once "./_include/permissions.php";
+    // archive is only allowed if user may change files
+    if (!permissions_grant($dir, NULL, "change"))
+        show_error($GLOBALS["error_msg"]["accessfunc"]);
 
-	if(!$GLOBALS["zip"] && !$GLOBALS["tar"] && !$GLOBALS["tgz"]) show_error($GLOBALS["error_msg"]["miscnofunc"]);
+    if (!$GLOBALS["zip"] && !$GLOBALS["tar"] && !$GLOBALS["tgz"]) show_error($GLOBALS["error_msg"]["miscnofunc"]);
 
-	if(isset($GLOBALS['__POST']["name"])) {
-		$name=basename($GLOBALS['__POST']["name"]);
-		if($name=="") show_error($GLOBALS["error_msg"]["miscnoname"]);
-		switch($GLOBALS['__POST']["type"]) {
-			case "zip":	zip_items($dir,$name);	break;
-			case "tar":	tar_items($dir,$name);	break;
-			default:		tgz_items($dir,$name);
-		}
-		header("Location: ".make_link("list",$dir,NULL));
-	}
+    if (isset($GLOBALS['__POST']["name"]))
+    {
+        $name = basename($GLOBALS['__POST']["name"]);
+        if ($name == "") show_error($GLOBALS["error_msg"]["miscnoname"]);
+        switch ($GLOBALS['__POST']["type"])
+        {
+            case "zip":
+                zip_items($dir, $name);
+                break;
+            case "tar":
+                tar_items($dir, $name);
+                break;
+            default:
+                tgz_items($dir, $name);
+        }
+        header("Location: " . make_link("list", $dir, NULL));
+    }
 
-	show_header($GLOBALS["messages"]["actarchive"]);
-	echo "<BR><FORM name=\"archform\" method=\"post\" action=\"".make_link("arch",$dir,NULL)."\">\n";
+    show_header($GLOBALS["messages"]["actarchive"]);
+    echo "<BR><FORM name=\"archform\" method=\"post\" action=\"" . make_link("arch", $dir, NULL) . "\">\n";
 
-	$cnt=count($GLOBALS['__POST']["selitems"]);
-	for($i=0;$i<$cnt;++$i) {
-		echo "<INPUT type=\"hidden\" name=\"selitems[]\" value=\"".htmlspecialchars($GLOBALS['__POST']["selitems"][$i])."\">\n";
-	}
+    $cnt = count($GLOBALS['__POST']["selitems"]);
+    for ($i = 0; $i < $cnt; ++$i)
+    {
+        echo "<INPUT type=\"hidden\" name=\"selitems[]\" value=\"" . htmlspecialchars($GLOBALS['__POST']["selitems"][$i]) . "\">\n";
+    }
 
-	echo "<TABLE width=\"300\"><TR><TD>".$GLOBALS["messages"]["nameheader"].":</TD><TD align=\"right\">";
-	echo "<INPUT type=\"text\" name=\"name\" size=\"25\"></TD></TR>\n";
-	echo "<TR><TD>".$GLOBALS["messages"]["typeheader"].":</TD><TD align=\"right\"><SELECT name=\"type\">\n";
-	if($GLOBALS["zip"]) echo "<OPTION value=\"zip\">Zip</OPTION>\n";
-	if($GLOBALS["tar"]) echo "<OPTION value=\"tar\">Tar</OPTION>\n";
-	if($GLOBALS["tgz"]) echo "<OPTION value=\"tgz\">TGz</OPTION>\n";
-	echo "</SELECT></TD></TR>";
-	echo "<TR><TD></TD><TD align=\"right\"><INPUT type=\"submit\" value=\"".$GLOBALS["messages"]["btncreate"]."\">\n";
-	echo "<input type=\"button\" value=\"".$GLOBALS["messages"]["btncancel"];
-	echo "\" onClick=\"javascript:location='".make_link("list",$dir,NULL)."';\">\n</TD></TR></FORM></TABLE><BR>\n";
+    echo "<TABLE width=\"300\"><TR><TD>" . $GLOBALS["messages"]["nameheader"] . ":</TD><TD align=\"right\">";
+    echo "<INPUT type=\"text\" name=\"name\" size=\"25\"></TD></TR>\n";
+    echo "<TR><TD>" . $GLOBALS["messages"]["typeheader"] . ":</TD><TD align=\"right\"><SELECT name=\"type\">\n";
+    if ($GLOBALS["zip"]) echo "<OPTION value=\"zip\">Zip</OPTION>\n";
+    if ($GLOBALS["tar"]) echo "<OPTION value=\"tar\">Tar</OPTION>\n";
+    if ($GLOBALS["tgz"]) echo "<OPTION value=\"tgz\">TGz</OPTION>\n";
+    echo "</SELECT></TD></TR>";
+    echo "<TR><TD></TD><TD align=\"right\"><INPUT type=\"submit\" value=\"" . $GLOBALS["messages"]["btncreate"] . "\">\n";
+    echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btncancel"];
+    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL) . "';\">\n</TD></TR></FORM></TABLE><BR>\n";
 ?><script language="JavaScript1.2" type="text/javascript">
-<!--
-	if(document.archform) document.archform.name.focus();
-// -->
-</script><?php
-}
-//------------------------------------------------------------------------------
-?>
+        <!--
+        if (document.archform) document.archform.name.focus();
+        // 
+        -->
+    </script><?php
+            }
+            //------------------------------------------------------------------------------
+                ?>

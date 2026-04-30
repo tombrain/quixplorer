@@ -6,7 +6,7 @@ require_once("_include/fun_extra.php");
 // upload file
 function upload_items($dir)
 {
-    _debug( "fun_up_ajaxupload.upload_items($dir)" );
+    _debug("fun_up_ajaxupload.upload_items($dir)");
 
     if (!permissions_grant($dir, NULL, "create"))
     {
@@ -15,8 +15,8 @@ function upload_items($dir)
 
     if (isset($GLOBALS['__POST']["confirm"]) && $GLOBALS['__POST']["confirm"] == "true")
     {
-        _debug( "linking to list($dir)" );
-        header("Location: ".make_link("list",$dir,NULL));
+        _debug("linking to list($dir)");
+        header("Location: " . make_link("list", $dir, NULL));
         return;
     }
 
@@ -27,25 +27,25 @@ function upload_items($dir)
     show_header($GLOBALS["messages"]["actupload"], $additional_header_information);
 ?>
 
-<br>
-	<div id="example1" class="example">
-		<div class="wrapper">
-			<div id="button1" class="button">Upload</div>
-		</div>
-		<ol class="status"></ol>
-		<p>Uploaded files:</p>
-		<ol class="files"></ol>
-	</div>
+    <br>
+    <div id="example1" class="example">
+        <div class="wrapper">
+            <div id="button1" class="button">Upload</div>
+        </div>
+        <ol class="status"></ol>
+        <p>Uploaded files:</p>
+        <ol class="files"></ol>
+    </div>
     <table>
-            <tr>
-                <td>
-                    <input type="button" onClick="window.location = '<?php echo make_link("list", $dir, NULL); ?>';" value="<?php echo $GLOBALS["error_msg"]["back"];?>">
-                </td>
-            </tr>
-        </table>
+        <tr>
+            <td>
+                <input type="button" onClick="window.location = '<?php echo make_link("list", $dir, NULL); ?>';" value="<?php echo $GLOBALS["error_msg"]["back"]; ?>">
+            </td>
+        </tr>
+    </table>
     </form>
     <br>
 <?php
-	return;
+    return;
 }
 ?>

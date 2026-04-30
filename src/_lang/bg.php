@@ -83,7 +83,7 @@ $GLOBALS["messages"] = array(
       "logoutlink"            => "ИЗХОД",
       "uploadlink"            => "ПРИКАЧИ",
       "searchlink"            => "ТЪРСИ",
-	  "unziplink"			=> "UNZIP",
+      "unziplink"            => "UNZIP",
 
       // list
       "nameheader"            => "Файл",
@@ -150,9 +150,13 @@ $GLOBALS["messages"] = array(
       "misclang"            => "Език",
       "miscnoresult"            => "Няма резултати",
       "miscsubdirs"            => "Търси в поддиректории",
-      "miscpermnames"            => array("Само да разглежда","Редактиране","Смяна на парола","Права и смяна на парола",
-                              "Администратор"),
-      "miscyesno"            => array("Да","Не","Д","Н"),
+      "miscpermnames"            => array(
+            "Само да разглежда",
+            "Редактиране",
+            "Смяна на парола",
+            "Права и смяна на парола",
+            "Администратор"
+      ),
+      "miscyesno"            => array("Да", "Не", "Д", "Н"),
       "miscchmod"            => array("Притежател", "Група", "Общодостъпен"),
 );
-?>

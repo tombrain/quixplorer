@@ -27,48 +27,48 @@
 ------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------
 Author: The QuiX project
-	quix@free.fr
-	http://www.quix.tk
-	http://quixplorer.sourceforge.net
+    quix@free.fr
+    http://www.quix.tk
+    http://quixplorer.sourceforge.net
 
 Comment:
-	Header File
+    Header File
 
-	Have Fun...
+    Have Fun...
 -------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
+
 /**
  * header for html-page
-**/
+ **/
 function show_header($title, $additional_header_content = null)
 {
     global $site_name;
 
-	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-	header("Cache-Control: no-cache, must-revalidate");
-	header("Pragma: no-cache");
-	header("Content-Type: text/html; charset=".$GLOBALS["charset"]);
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-cache, must-revalidate");
+    header("Pragma: no-cache");
+    header("Content-Type: text/html; charset=" . $GLOBALS["charset"]);
 
-	//echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"";
-	//echo "\"http://www.w3.org/TR/REC-html40/loose.dtd\">\n";
-	echo "<html lang=\"".$GLOBALS["language"]."\" dir=\"".$GLOBALS["text_dir"]."\">\n";
-	echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=".$GLOBALS["charset"]."\">\n";
-	echo "<title>".htmlspecialchars($site_name, ENT_QUOTES, 'UTF-8')."</title>\n";
-	echo "<link href=\"_style/style.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    //echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"";
+    //echo "\"http://www.w3.org/TR/REC-html40/loose.dtd\">\n";
+    echo "<html lang=\"" . $GLOBALS["language"] . "\" dir=\"" . $GLOBALS["text_dir"] . "\">\n";
+    echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $GLOBALS["charset"] . "\">\n";
+    echo "<title>" . htmlspecialchars($site_name, ENT_QUOTES, 'UTF-8') . "</title>\n";
+    echo "<link href=\"_style/style.css\" rel=\"stylesheet\" type=\"text/css\">\n";
 
-	echo "<link href=\"_lib/uploadify/uploadify.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
+    echo "<link href=\"_lib/uploadify/uploadify.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
 
-	echo "<script type=\"text/javascript\" src=\"_lib/edit_area/edit_area_full.js\"></script>\n";
-	echo "<script type=\"text/javascript\" src=\"_lib/jquery/jquery.min.js\"></script>\n";
+    echo "<script type=\"text/javascript\" src=\"_lib/edit_area/edit_area_full.js\"></script>\n";
+    echo "<script type=\"text/javascript\" src=\"_lib/jquery/jquery.min.js\"></script>\n";
 
     if ($additional_header_content != null)
         echo $additional_header_content;
 
-	echo "</head>\n<body><center>\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"5\"><tbody>\n";
-	echo "<tr><td class=\"title\">";
-	if($GLOBALS["require_login"] && isset($GLOBALS['__SESSION']["s_user"])) echo "[".htmlspecialchars($GLOBALS['__SESSION']["s_user"])."] - ";
-	echo $title."</td></tr></tbody></table>\n\n";
+    echo "</head>\n<body><center>\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"5\"><tbody>\n";
+    echo "<tr><td class=\"title\">";
+    if ($GLOBALS["require_login"] && isset($GLOBALS['__SESSION']["s_user"])) echo "[" . htmlspecialchars($GLOBALS['__SESSION']["s_user"]) . "] - ";
+    echo $title . "</td></tr></tbody></table>\n\n";
 }
 //------------------------------------------------------------------------------
-?>
