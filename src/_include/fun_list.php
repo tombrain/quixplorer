@@ -5,31 +5,20 @@ require_once("./_include/login.php");
 require_once("./_include/qxpath.php");
 
 function make_list($_list1, $_list2)
-{        // make list of files
+{        // make list of files: directories always first (like Windows Explorer)
     $list = array();
 
-    if ($GLOBALS["srt"] == "yes")
+    if (is_array($_list1))
     {
-        $list1 = $_list1;
-        $list2 = $_list2;
-    }
-    else
-    {
-        $list1 = $_list2;
-        $list2 = $_list1;
-    }
-
-    if (is_array($list1))
-    {
-        foreach ($list1 as $key => $val)
+        foreach ($_list1 as $key => $val)
         {
             $list[$key] = $val;
         }
     }
 
-    if (is_array($list2))
+    if (is_array($_list2))
     {
-        foreach ($list2 as $key => $val)
+        foreach ($_list2 as $key => $val)
         {
             $list[$key] = $val;
         }
@@ -63,9 +52,7 @@ function make_tables($dir, &$dir_list, &$file_list, &$tot_file_size, &$num_items
         $tot_file_size += $new_file_size;
         $num_items++;
 
-        $fullpath = $dir . DIRECTORY_SEPARATOR . $new_item;
-
-        if (is_dir($fullpath))
+        if (is_dir($abs_new_item))
         {
             if ($GLOBALS["order"] == "mod")
             {
