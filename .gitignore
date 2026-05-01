@@ -2,7 +2,6 @@
 *.pyc
 Thumbs.db
 tags
-src/_config/conf.php
 src/_config/.htusers.php
 .DS_Store
 src/tmp
