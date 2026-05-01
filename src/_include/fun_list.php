@@ -388,7 +388,11 @@ function list_dir($dir)
     echo "<TR><TD colspan=\"7\"><HR></TD></TR>\n";
 
     // make & print Table using lists
-    print_table($dir, make_list($dir_list, $file_list));
+    // when sorting by name: dirs first; for all other orders: files first
+    if ($GLOBALS["order"] == "name")
+        print_table($dir, make_list($dir_list, $file_list));
+    else
+        print_table($dir, make_list($file_list, $dir_list));
 
     // print number of items & total filesize
     echo "<TR><TD colspan=\"7\"><HR></TD></TR><TR>\n<TD class=\"header\"></TD>";
