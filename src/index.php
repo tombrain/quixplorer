@@ -30,7 +30,7 @@ Authors: quix@free.fr, ck@realtime-projects.com
     http://quixplorer.sourceforge.net
 
 Comment:
-    QuiXplorer Version 2.4.2
+    QuiXplorer Version 2.6.0
     Main File
 
     Have Fun...

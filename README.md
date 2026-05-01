@@ -9,6 +9,11 @@ quixplorer is a simple web based file management software. It allows you to:
 
 ## News
 
+### Version 2.6.0 released
+
+This version adds PHP 8.4 compatibility, code formatting improvements,
+full UTF-8 conversion of all source files, and row highlighting on mouseover.
+
 ### Version 2.5.8 released
 
 This version fixes some encoding issues with different language files and the

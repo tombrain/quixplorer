@@ -1,6 +1,15 @@
 QuiXplorer -- VERSION HISTORY & RELEASE NOTES
 =============================================
 
+### Version 2.6.0 2026-05-01
+
+- PHP 8.4 compatibility (removed deprecated functions: each(), get_cfg_var(),
+  diskfreespace(), preg_replace /e modifier, old HTTP superglobal fallbacks)
+- Code formatting: converted all source files to 4-space indentation
+- Converted all source files to UTF-8 without BOM
+- Row highlighting on mouseover in file list
+- Directories are listed first when sorting by name
+
 ### Version 2.5.8 2015-02-20
 
 - Bugfix: Mime types
