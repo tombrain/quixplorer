@@ -74,29 +74,45 @@ function chmod_item($dir, $item)
     if (strlen($s_item) > 50) $s_item = "..." . substr($s_item, -47);
     show_header($GLOBALS["messages"]["actperms"] . ": /" . $s_item);
 
-    // Form
-    echo "<BR><TABLE width=\"175\"><FORM method=\"post\" action=\"";
-    echo make_link("chmod", $dir, $item) . "\">\n";
-    echo "<INPUT type=\"hidden\" name=\"confirm\" value=\"true\">\n";
+    $chmod_link = make_link("chmod", $dir, $item);
+    $list_link  = make_link("list", $dir, NULL);
+    $btn_change = htmlspecialchars($GLOBALS["messages"]["btnchange"], ENT_QUOTES, 'UTF-8');
+    $btn_cancel = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
 
-    // print table with current perms & checkboxes to change    
+    echo <<<HTML
+    <br>
+    <table width="175">
+        <form method="post" action="{$chmod_link}">
+            <input type="hidden" name="confirm" value="true">
+    HTML;
+
+    // print table with current perms & checkboxes to change
+    $pos = "rwx";
     for ($i = 0; $i < 3; ++$i)
     {
-        echo "<TR><TD>" . $GLOBALS["messages"]["miscchmod"][$i] . "</TD>";
+        $label = $GLOBALS["messages"]["miscchmod"][$i];
+        echo "        <tr><td>{$label}</td>";
         for ($j = 0; $j < 3; ++$j)
         {
-            echo "<TD>" . $pos{
-            $j} . "&nbsp;<INPUT type=\"checkbox\"";
-            if ($mode{
-            (3 * $i) + $j} != "-") echo " checked";
-            echo " name=\"r_" . $i . $j . "\" value=\"1\"></TD>";
+            $char    = $pos[$j];
+            $checked = $mode[(3 * $i) + $j] != "-" ? " checked" : "";
+            $name    = "r_{$i}{$j}";
+            echo "<td>{$char}&nbsp;<input type=\"checkbox\" name=\"{$name}\" value=\"1\"{$checked}></td>";
         }
-        echo "</TR>\n";
+        echo "</tr>\n";
     }
 
-    // Submit / Cancel
-    echo "</TABLE>\n<BR><TABLE>\n<TR><TD>\n<INPUT type=\"submit\" value=\"" . $GLOBALS["messages"]["btnchange"];
-    echo "\"></TD>\n<TD><input type=\"button\" value=\"" . $GLOBALS["messages"]["btncancel"];
-    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL) . "';\">\n</TD></TR></FORM></TABLE><BR>\n";
+    echo <<<HTML
+        </table>
+        <br>
+        <table>
+            <tr>
+                <td><input type="submit" value="{$btn_change}"></td>
+                <td><input type="button" value="{$btn_cancel}" onclick="location='{$list_link}';"></td>
+            </tr>
+        </form>
+        </table>
+        <br>
+    HTML;
 }
 //------------------------------------------------------------------------------

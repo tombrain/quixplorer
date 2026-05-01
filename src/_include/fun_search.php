@@ -85,33 +85,33 @@ function print_table($list)
     $cnt = count($list);
     for ($i = 0; $i < $cnt; ++$i)
     {
-        $dir = $list[$i][0];
+        $dir  = $list[$i][0];
         $item = $list[$i][1];
-        $s_dir = $dir;
-        if (strlen($s_dir) > 65) $s_dir = substr($s_dir, 0, 62) . "...";
-        $s_item = $item;
-        if (strlen($s_item) > 45) $s_item = substr($s_item, 0, 42) . "...";
-        $link = "";
-        $target = "";
+
+        $s_dir  = strlen($dir)  > 65 ? substr($dir, 0, 62)  . "..." : $dir;
+        $s_item = strlen($item) > 45 ? substr($item, 0, 42) . "..." : $item;
 
         if (get_is_dir($dir, $item))
         {
-            $img = "dir.gif";
+            $img  = "dir.gif";
             $link = make_link("list", get_rel_item($dir, $item), NULL);
         }
         else
         {
-            $img = get_mime_type($dir, $item, "img");
+            $img  = get_mime_type($dir, $item, "img");
             $link = make_link("download", $dir, $item);
         }
 
-        echo "<TR><TD>" . "<IMG border=\"0\" width=\"16\" height=\"16\" ";
-        echo "align=\"ABSMIDDLE\" src=\"_img/" . $img . "\" ALT=\"\">&nbsp;";
-        /*if($link!="")*/
-        echo "<A HREF=\"" . $link . "\" TARGET=\"" . $target . "\">";
-        //else echo "<A>";
-        echo htmlspecialchars($s_item) . "</A></TD><TD><A HREF=\"" . make_link("list", $dir, NULL) . "\"> /";
-        echo htmlspecialchars($s_dir) . "</A></TD></TR>\n";
+        $dir_link    = make_link("list", $dir, NULL);
+        $item_enc    = htmlspecialchars($s_item, ENT_QUOTES, 'UTF-8');
+        $dir_enc     = htmlspecialchars($s_dir, ENT_QUOTES, 'UTF-8');
+
+        echo <<<HTML
+        <tr>
+            <td><img width="16" height="16" align="absmiddle" src="_img/{$img}" alt="">&nbsp;<a href="{$link}">{$item_enc}</a></td>
+            <td><a href="{$dir_link}"> /{$dir_enc}</a></td>
+        </tr>
+        HTML;
     }
 }
 //------------------------------------------------------------------------------
@@ -133,44 +133,75 @@ function search_items($dir)
     if ($searchitem != NULL) $msg .= ": (/" . get_rel_item($dir, $searchitem) . ")";
     show_header(htmlspecialchars($msg));
 
-    // Search Box
-    echo "<BR><TABLE><FORM name=\"searchform\" action=\"" . make_link("search", $dir, NULL);
-    echo "\" method=\"post\">\n<TR><TD><INPUT name=\"searchitem\" type=\"text\" size=\"25\" value=\"";
-    echo htmlspecialchars($searchitem !== NULL ? $searchitem : "") . "\"><INPUT type=\"submit\" value=\"" . $GLOBALS["messages"]["btnsearch"];
-    echo "\">&nbsp;<input type=\"button\" value=\"" . $GLOBALS["messages"]["btnclose"];
-    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL);
-    echo "';\"></TD></TR><TR><TD><INPUT type=\"checkbox\" name=\"subdir\" value=\"y\"";
-    echo ($subdir ? " checked>" : ">") . $GLOBALS["messages"]["miscsubdirs"] . "</TD></TR></FORM></TABLE>\n";
+    $search_link  = make_link("search", $dir, NULL);
+    $list_link    = make_link("list", $dir, NULL);
+    $search_val   = htmlspecialchars($searchitem !== NULL ? $searchitem : "", ENT_QUOTES, 'UTF-8');
+    $btn_search   = htmlspecialchars($GLOBALS["messages"]["btnsearch"], ENT_QUOTES, 'UTF-8');
+    $btn_close    = htmlspecialchars($GLOBALS["messages"]["btnclose"], ENT_QUOTES, 'UTF-8');
+    $lbl_subdirs  = $GLOBALS["messages"]["miscsubdirs"];
+    $subdir_chk   = $subdir ? " checked" : "";
+
+    echo <<<HTML
+    <br>
+    <table>
+        <form name="searchform" action="{$search_link}" method="post">
+            <tr><td>
+                <input name="searchitem" type="text" size="25" value="{$search_val}">
+                <input type="submit" value="{$btn_search}">
+                &nbsp;<input type="button" value="{$btn_close}" onclick="location='{$list_link}';">
+            </td></tr>
+            <tr><td>
+                <input type="checkbox" name="subdir" value="y"{$subdir_chk}> {$lbl_subdirs}
+            </td></tr>
+        </form>
+    </table>
+    HTML;
 
     // Results
     if ($searchitem != NULL)
     {
-        echo "<TABLE width=\"95%\"><TR><TD colspan=\"2\"><HR></TD></TR>\n";
+        $hdr_name = $GLOBALS["messages"]["nameheader"];
+        $hdr_path = $GLOBALS["messages"]["pathheader"];
+
+        echo <<<HTML
+        <table width="95%">
+            <tr><td colspan="2"><hr></td></tr>
+        HTML;
+
         if (is_array($list) && count($list) > 0)
         {
-            // Table Header
-            echo "<TR>\n<TD WIDTH=\"42%\" class=\"header\"><B>" . $GLOBALS["messages"]["nameheader"];
-            echo "</B></TD>\n<TD WIDTH=\"58%\" class=\"header\"><B>" . $GLOBALS["messages"]["pathheader"];
-            echo "</B></TD></TR>\n<TR><TD colspan=\"2\"><HR></TD></TR>\n";
+            echo <<<HTML
+            <tr>
+                <td width="42%" class="header"><b>{$hdr_name}</b></td>
+                <td width="58%" class="header"><b>{$hdr_path}</b></td>
+            </tr>
+            <tr><td colspan="2"><hr></td></tr>
+            HTML;
 
-            // make & print table of found items
             print_table($list);
 
-            echo "<TR><TD colspan=\"2\"><HR></TD></TR>\n<TR><TD class=\"header\">" . count($list) . " ";
-            echo $GLOBALS["messages"]["miscitems"] . ".</TD><TD class=\"header\"></TD></TR>\n";
+            $item_count = count($list);
+            $misc_items = $GLOBALS["messages"]["miscitems"];
+            echo <<<HTML
+            <tr><td colspan="2"><hr></td></tr>
+            <tr>
+                <td class="header">{$item_count} {$misc_items}.</td>
+                <td class="header"></td>
+            </tr>
+            HTML;
         }
         else
         {
-            echo "<TR><TD>" . $GLOBALS["messages"]["miscnoresult"] . "</TD></TR>";
+            $no_result = $GLOBALS["messages"]["miscnoresult"];
+            echo "<tr><td>{$no_result}</td></tr>\n";
         }
-        echo "<TR><TD colspan=\"2\"><HR></TD></TR></TABLE>\n";
+
+        echo <<<HTML
+            <tr><td colspan="2"><hr></td></tr>
+        </table>
+        <script>
+            if (document.searchform) document.searchform.searchitem.focus();
+        </script>
+        HTML;
     }
-?><script language="JavaScript1.2" type="text/javascript">
-        <!--
-        if (document.searchform) document.searchform.searchitem.focus();
-        // 
-        -->
-    </script><?php
-            }
-            //------------------------------------------------------------------------------
-                ?>
+}

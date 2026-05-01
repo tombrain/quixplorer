@@ -49,65 +49,95 @@ function admin($admin, $dir)
     // Javascript functions:
     include "./_include/js_admin.php";
 
-    // Change Password
-    echo "<BR><HR width=\"95%\"><TABLE width=\"350\"><TR><TD colspan=\"2\" class=\"header\"><B>";
-    echo $GLOBALS["messages"]["actchpwd"] . ":</B></TD></TR>\n";
-    echo "<FORM name=\"chpwd\" action=\"" . make_link("admin", $dir, NULL) . "\" method=\"post\">\n";
-    echo "<INPUT type=\"hidden\" name=\"action2\" value=\"chpwd\">\n";
-    echo "<TR><TD>" . $GLOBALS["messages"]["miscoldpass"] . ": </TD><TD align=\"right\">";
-    echo "<INPUT type=\"password\" name=\"oldpwd\" size=\"25\"></TD></TR>\n";
-    echo "<TR><TD>" . $GLOBALS["messages"]["miscnewpass"] . ": </TD><TD align=\"right\">";
-    echo "<INPUT type=\"password\" name=\"newpwd1\" size=\"25\"></TD></TR>\n";
-    echo "<TR><TD>" . $GLOBALS["messages"]["miscconfnewpass"] . ": </TD><TD align=\"right\">";
-    echo "<INPUT type=\"password\" name=\"newpwd2\" size=\"25\"></TD></TR>\n";
-    echo "<TR><TD colspan=\"2\" align=\"right\"><INPUT type=\"submit\" value=\"" . $GLOBALS["messages"]["btnchange"];
-    echo "\" onClick=\"return check_pwd();\">\n</TD></TR></FORM></TABLE>\n";
+    $admin_link       = make_link("admin", $dir, NULL);
+    $list_link        = make_link("list", $dir, NULL);
+    $msg_actchpwd     = $GLOBALS["messages"]["actchpwd"];
+    $msg_oldpass      = $GLOBALS["messages"]["miscoldpass"];
+    $msg_newpass      = $GLOBALS["messages"]["miscnewpass"];
+    $msg_confnewpass  = $GLOBALS["messages"]["miscconfnewpass"];
+    $btn_change       = htmlspecialchars($GLOBALS["messages"]["btnchange"], ENT_QUOTES, 'UTF-8');
+    $btn_close        = htmlspecialchars($GLOBALS["messages"]["btnclose"], ENT_QUOTES, 'UTF-8');
+
+    echo <<<HTML
+    <br>
+    <hr style="width:95%">
+    <table width="350">
+        <tr><td colspan="2" class="header"><b>{$msg_actchpwd}:</b></td></tr>
+        <form name="chpwd" action="{$admin_link}" method="post">
+            <input type="hidden" name="action2" value="chpwd">
+            <tr><td>{$msg_oldpass}: </td><td align="right"><input type="password" name="oldpwd" size="25"></td></tr>
+            <tr><td>{$msg_newpass}: </td><td align="right"><input type="password" name="newpwd1" size="25"></td></tr>
+            <tr><td>{$msg_confnewpass}: </td><td align="right"><input type="password" name="newpwd2" size="25"></td></tr>
+            <tr><td colspan="2" align="right">
+                <input type="submit" value="{$btn_change}" onclick="return check_pwd();">
+            </td></tr>
+        </form>
+    </table>
+    HTML;
 
     // Edit / Add / Remove User
     if ($admin)
     {
-        echo "<HR width=\"95%\"><TABLE width=\"350\"><TR><TD colspan=\"6\" class=\"header\" nowrap>";
-        echo "<B>" . $GLOBALS["messages"]["actusers"] . ":</B></TD></TR>\n";
-        echo "<TR><TD colspan=\"5\">" . $GLOBALS["messages"]["miscuseritems"] . "</TD></TR>\n";
-        echo "<FORM name=\"userform\" action=\"" . make_link("admin", $dir, NULL) . "\" method=\"post\">\n";
-        echo "<INPUT type=\"hidden\" name=\"action2\" value=\"edituser\">\n";
-        $cnt = count($GLOBALS["users"]);
+        $msg_actusers      = $GLOBALS["messages"]["actusers"];
+        $msg_miscuseritems = $GLOBALS["messages"]["miscuseritems"];
+        $btn_add           = htmlspecialchars($GLOBALS["messages"]["btnadd"], ENT_QUOTES, 'UTF-8');
+        $btn_edit          = htmlspecialchars($GLOBALS["messages"]["btnedit"], ENT_QUOTES, 'UTF-8');
+        $btn_remove        = htmlspecialchars($GLOBALS["messages"]["btnremove"], ENT_QUOTES, 'UTF-8');
+        $add_link          = $admin_link . "&action2=adduser";
 
+        echo <<<HTML
+        <hr style="width:95%">
+        <table width="350">
+            <tr><td colspan="6" class="header" nowrap><b>{$msg_actusers}:</b></td></tr>
+            <tr><td colspan="5">{$msg_miscuseritems}</td></tr>
+            <form name="userform" action="{$admin_link}" method="post">
+                <input type="hidden" name="action2" value="edituser">
+        HTML;
+
+        $cnt = count($GLOBALS["users"]);
         for ($i = 0; $i < $cnt; ++$i)
         {
-            // Username & Home dir:
-            $user = $GLOBALS["users"][$i][0];
-            if (strlen($user) > 15) $user = substr($user, 0, 12) . "...";
-            $home = $GLOBALS["users"][$i][2];
-            if (strlen($home) > 30) $home = substr($home, 0, 27) . "...";
+            $user      = $GLOBALS["users"][$i][0];
+            $user_disp = strlen($user) > 15 ? substr($user, 0, 12) . "..." : $user;
+            $home      = $GLOBALS["users"][$i][2];
+            $home_disp = strlen($home) > 30 ? substr($home, 0, 27) . "..." : $home;
+            $user_enc  = htmlspecialchars($user, ENT_QUOTES, 'UTF-8');
+            $checked   = ($i == 0) ? " checked" : "";
+            $yn_hidden = $GLOBALS["users"][$i][4] ? $GLOBALS["messages"]["miscyesno"][2] : $GLOBALS["messages"]["miscyesno"][3];
+            $perms_val = $GLOBALS["users"][$i][6];
+            $yn_active = $GLOBALS["users"][$i][7] ? $GLOBALS["messages"]["miscyesno"][2] : $GLOBALS["messages"]["miscyesno"][3];
 
-            echo "<TR><TD width=\"1%\"><INPUT TYPE=\"radio\" name=\"user\" value=\"";
-            echo $GLOBALS["users"][$i][0] . "\"" . (($i == 0) ? " checked" : "") . "></TD>\n";
-            echo "<TD width=\"30%\">" . $user . "</TD><TD width=\"60%\">" . $home . "</TD>\n";
-            echo "<TD width=\"3%\">" . ($GLOBALS["users"][$i][4] ? $GLOBALS["messages"]["miscyesno"][2] :
-                $GLOBALS["messages"]["miscyesno"][3]) . "</TD>\n";
-            echo "<TD width=\"3%\">" . $GLOBALS["users"][$i][6] . "</TD>\n";
-            echo "<TD width=\"3%\">" . ($GLOBALS["users"][$i][7] ? $GLOBALS["messages"]["miscyesno"][2] :
-                $GLOBALS["messages"]["miscyesno"][3]) . "</TD></TR>\n";
+            echo <<<HTML
+                <tr>
+                    <td width="1%"><input type="radio" name="user" value="{$user_enc}"{$checked}></td>
+                    <td width="30%">{$user_disp}</td>
+                    <td width="60%">{$home_disp}</td>
+                    <td width="3%">{$yn_hidden}</td>
+                    <td width="3%">{$perms_val}</td>
+                    <td width="3%">{$yn_active}</td>
+                </tr>
+            HTML;
         }
-        echo "<TR><TD colspan=\"6\" align=\"right\">";
-        echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btnadd"];
-        echo "\" onClick=\"javascript:location='" . make_link("admin", $dir, NULL) . "&action2=adduser';\">\n";
-        echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btnedit"];
-        echo "\" onClick=\"javascript:Edit();\">\n";
-        echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btnremove"];
-        echo "\" onClick=\"javascript:Delete();\">\n</TD></TR></FORM></TABLE>\n";
+
+        echo <<<HTML
+                <tr><td colspan="6" align="right">
+                    <input type="button" value="{$btn_add}" onclick="location='{$add_link}';">
+                    <input type="button" value="{$btn_edit}" onclick="Edit();">
+                    <input type="button" value="{$btn_remove}" onclick="Delete();">
+                </td></tr>
+            </form>
+        </table>
+        HTML;
     }
 
-    echo "<HR width=\"95%\"><input type=\"button\" value=\"" . $GLOBALS["messages"]["btnclose"];
-    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL) . "';\"><BR><BR>\n";
-?><script language="JavaScript1.2" type="text/javascript">
-        <!--
+    echo <<<HTML
+    <hr style="width:95%">
+    <input type="button" value="{$btn_close}" onclick="location='{$list_link}';"><br><br>
+    <script>
         if (document.chpwd) document.chpwd.oldpwd.focus();
-        // 
-        -->
-    </script><?php
-            }
+    </script>
+    HTML;
+    }
 
             /**
              * Change Password
@@ -175,48 +205,67 @@ function admin($admin, $dir)
                 // Javascript functions:
                 include "./_include/js_admin2.php";
 
-                echo "<FORM name=\"adduser\" action=\"" . make_link("admin", $dir, NULL) . "&action2=adduser\" method=\"post\">\n";
-                echo "<INPUT type=\"hidden\" name=\"confirm\" value=\"true\"><BR><TABLE width=\"450\">\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscusername"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"user\" size=\"30\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscpassword"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"password\" name=\"pass1\" size=\"30\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscconfpass"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"password\" name=\"pass2\" size=\"30\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["mischomedir"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"home_dir\" size=\"30\" value=\"";
-                echo $GLOBALS["home_dir"] . "\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["mischomeurl"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"home_url\" size=\"30\" value=\"";
-                echo $GLOBALS["home_url"] . "\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscshowhidden"] . ":</TD>";
-                echo "<TD align=\"right\"><SELECT name=\"show_hidden\">\n";
-                echo "<OPTION value=\"0\">" . $GLOBALS["messages"]["miscyesno"][1] . "</OPTION>";
-                echo "<OPTION value=\"1\">" . $GLOBALS["messages"]["miscyesno"][0] . "</OPTION>\n";
-                echo "</SELECT></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["mischidepattern"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"no_access\" size=\"30\" value=\"^\\.ht\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscperms"] . ":</TD>";
+                $add_link    = make_link("admin", $dir, NULL) . "&action2=adduser";
+                $cancel_link = make_link("admin", $dir, NULL);
+                $home_dir_v  = htmlspecialchars($GLOBALS["home_dir"], ENT_QUOTES, 'UTF-8');
+                $home_url_v  = htmlspecialchars($GLOBALS["home_url"], ENT_QUOTES, 'UTF-8');
+                $lbl_user    = $GLOBALS["messages"]["miscusername"];
+                $lbl_pass    = $GLOBALS["messages"]["miscpassword"];
+                $lbl_conf    = $GLOBALS["messages"]["miscconfpass"];
+                $lbl_hdir    = $GLOBALS["messages"]["mischomedir"];
+                $lbl_hurl    = $GLOBALS["messages"]["mischomeurl"];
+                $lbl_hidden  = $GLOBALS["messages"]["miscshowhidden"];
+                $lbl_pat     = $GLOBALS["messages"]["mischidepattern"];
+                $lbl_perms   = $GLOBALS["messages"]["miscperms"];
+                $lbl_active  = $GLOBALS["messages"]["miscactive"];
+                $opt_yes     = $GLOBALS["messages"]["miscyesno"][0];
+                $opt_no      = $GLOBALS["messages"]["miscyesno"][1];
+                $btn_add     = htmlspecialchars($GLOBALS["messages"]["btnadd"], ENT_QUOTES, 'UTF-8');
+                $btn_cancel  = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
 
-                // Permission settings
-                echo "<TD align=\"right\">\n";
+                echo <<<HTML
+                <form name="adduser" action="{$add_link}" method="post">
+                    <input type="hidden" name="confirm" value="true">
+                    <br>
+                    <table width="450">
+                        <tr><td>{$lbl_user}:</td><td align="right"><input type="text" name="user" size="30"></td></tr>
+                        <tr><td>{$lbl_pass}:</td><td align="right"><input type="password" name="pass1" size="30"></td></tr>
+                        <tr><td>{$lbl_conf}:</td><td align="right"><input type="password" name="pass2" size="30"></td></tr>
+                        <tr><td>{$lbl_hdir}:</td><td align="right"><input type="text" name="home_dir" size="30" value="{$home_dir_v}"></td></tr>
+                        <tr><td>{$lbl_hurl}:</td><td align="right"><input type="text" name="home_url" size="30" value="{$home_url_v}"></td></tr>
+                        <tr>
+                            <td>{$lbl_hidden}:</td>
+                            <td align="right"><select name="show_hidden">
+                                <option value="0">{$opt_no}</option>
+                                <option value="1">{$opt_yes}</option>
+                            </select></td>
+                        </tr>
+                        <tr><td>{$lbl_pat}:</td><td align="right"><input type="text" name="no_access" size="30" value="^\.ht"></td></tr>
+                        <tr><td>{$lbl_perms}:</td><td align="right">
+                HTML;
+
                 admin_print_permissions(NULL);
-                echo "</TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscactive"] . ":</TD>";
-                echo "<TD align=\"right\"><SELECT name=\"active\">\n";
-                echo "<OPTION value=\"1\">" . $GLOBALS["messages"]["miscyesno"][0] . "</OPTION>";
-                echo "<OPTION value=\"0\">" . $GLOBALS["messages"]["miscyesno"][1] . "</OPTION>\n";
-                echo "</SELECT></TD></TR>\n";
-                echo "<TR><TD colspan=\"2\" align=\"right\"><input type=\"submit\" value=\"" . $GLOBALS["messages"]["btnadd"];
-                echo "\" onClick=\"return check_pwd();\">\n<input type=\"button\" value=\"";
-                echo $GLOBALS["messages"]["btncancel"] . "\" onClick=\"javascript:location='";
-                echo make_link("admin", $dir, NULL) . "';\"></TD></TR></FORM></TABLE><BR>\n";
-                ?><script language="JavaScript1.2" type="text/javascript">
-        <!--
-        if (document.adduser) document.adduser.user.focus();
-        // 
-        -->
-    </script><?php
+
+                echo <<<HTML
+                        </td></tr>
+                        <tr>
+                            <td>{$lbl_active}:</td>
+                            <td align="right"><select name="active">
+                                <option value="1">{$opt_yes}</option>
+                                <option value="0">{$opt_no}</option>
+                            </select></td>
+                        </tr>
+                        <tr><td colspan="2" align="right">
+                            <input type="submit" value="{$btn_add}" onclick="return check_pwd();">
+                            <input type="button" value="{$btn_cancel}" onclick="location='{$cancel_link}';">
+                        </td></tr>
+                    </form>
+                </table>
+                <br>
+                <script>
+                    if (document.adduser) document.adduser.user.focus();
+                </script>
+                HTML;
             }
 
             /**
@@ -283,50 +332,72 @@ function admin($admin, $dir)
                 // Javascript functions:
                 include "./_include/js_admin3.php";
 
-                echo "<FORM name=\"edituser\" action=\"" . make_link("admin", $dir, NULL) . "&action2=edituser\" method=\"post\">\n";
-                echo "<INPUT type=\"hidden\" name=\"confirm\" value=\"true\"><INPUT type=\"hidden\" name=\"user\" value=\"" . $data[0] . "\">\n";
-                echo "<BR><TABLE width=\"450\">\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscusername"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type\"text\" name=\"nuser\" size=\"30\" value=\"";
-                echo $data[0] . "\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscconfpass"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"password\" name=\"pass1\" size=\"30\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscconfnewpass"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"password\" name=\"pass2\" size=\"30\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscchpass"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"checkbox\" name=\"chpass\" value=\"true\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["mischomedir"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"home_dir\" size=\"30\" value=\"";
-                echo $data[2] . "\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["mischomeurl"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"home_url\" size=\"30\" value=\"";
-                echo $data[3] . "\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscshowhidden"] . ":</TD>";
-                echo "<TD align=\"right\"><SELECT name=\"show_hidden\">\n";
-                echo "<OPTION value=\"0\">" . $GLOBALS["messages"]["miscyesno"][1] . "</OPTION>";
-                echo "<OPTION value=\"1\"" . ($data[4] ? " selected " : "") . ">";
-                echo $GLOBALS["messages"]["miscyesno"][0] . "</OPTION>\n";
-                echo "</SELECT></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["mischidepattern"] . ":</TD>\n";
-                echo "<TD align=\"right\"><INPUT type=\"text\" name=\"no_access\" size=\"30\" value=\"";
-                echo $data[5] . "\"></TD></TR>\n";
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscperms"] . ":</TD>\n";
+                $edit_link    = make_link("admin", $dir, NULL) . "&action2=edituser";
+                $cancel_link  = make_link("admin", $dir, NULL);
+                $user_enc     = htmlspecialchars($data[0], ENT_QUOTES, 'UTF-8');
+                $home_dir_v   = htmlspecialchars($data[2], ENT_QUOTES, 'UTF-8');
+                $home_url_v   = htmlspecialchars($data[3], ENT_QUOTES, 'UTF-8');
+                $no_access_v  = htmlspecialchars($data[5], ENT_QUOTES, 'UTF-8');
+                $lbl_user     = $GLOBALS["messages"]["miscusername"];
+                $lbl_confpass = $GLOBALS["messages"]["miscconfpass"];
+                $lbl_confnew  = $GLOBALS["messages"]["miscconfnewpass"];
+                $lbl_chpass   = $GLOBALS["messages"]["miscchpass"];
+                $lbl_hdir     = $GLOBALS["messages"]["mischomedir"];
+                $lbl_hurl     = $GLOBALS["messages"]["mischomeurl"];
+                $lbl_hidden   = $GLOBALS["messages"]["miscshowhidden"];
+                $lbl_pat      = $GLOBALS["messages"]["mischidepattern"];
+                $lbl_perms    = $GLOBALS["messages"]["miscperms"];
+                $lbl_active   = $GLOBALS["messages"]["miscactive"];
+                $opt_yes      = $GLOBALS["messages"]["miscyesno"][0];
+                $opt_no       = $GLOBALS["messages"]["miscyesno"][1];
+                $btn_save     = htmlspecialchars($GLOBALS["messages"]["btnsave"], ENT_QUOTES, 'UTF-8');
+                $btn_cancel   = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
+                $sel_hidden   = $data[4] ? " selected" : "";
+                $sel_inactive = $data[7] ? "" : " selected";
+                $disabled     = $self ? " disabled" : "";
 
-                // print out the extended permission table of the user permission
-                echo "<TD align=\"right\">\n";
+                echo <<<HTML
+                <form name="edituser" action="{$edit_link}" method="post">
+                    <input type="hidden" name="confirm" value="true">
+                    <input type="hidden" name="user" value="{$user_enc}">
+                    <br>
+                    <table width="450">
+                        <tr><td>{$lbl_user}:</td><td align="right"><input type="text" name="nuser" size="30" value="{$user_enc}"></td></tr>
+                        <tr><td>{$lbl_confpass}:</td><td align="right"><input type="password" name="pass1" size="30"></td></tr>
+                        <tr><td>{$lbl_confnew}:</td><td align="right"><input type="password" name="pass2" size="30"></td></tr>
+                        <tr><td>{$lbl_chpass}:</td><td align="right"><input type="checkbox" name="chpass" value="true"></td></tr>
+                        <tr><td>{$lbl_hdir}:</td><td align="right"><input type="text" name="home_dir" size="30" value="{$home_dir_v}"></td></tr>
+                        <tr><td>{$lbl_hurl}:</td><td align="right"><input type="text" name="home_url" size="30" value="{$home_url_v}"></td></tr>
+                        <tr>
+                            <td>{$lbl_hidden}:</td>
+                            <td align="right"><select name="show_hidden">
+                                <option value="0">{$opt_no}</option>
+                                <option value="1"{$sel_hidden}>{$opt_yes}</option>
+                            </select></td>
+                        </tr>
+                        <tr><td>{$lbl_pat}:</td><td align="right"><input type="text" name="no_access" size="30" value="{$no_access_v}"></td></tr>
+                        <tr><td>{$lbl_perms}:</td><td align="right">
+                HTML;
+
                 admin_print_permissions($data[0]);
-                echo "</TD></TR>\n";
 
-                echo "<TR><TD>" . $GLOBALS["messages"]["miscactive"] . ":</TD>";
-                echo "<TD align=\"right\"><SELECT name=\"active\"" . ($self ? " DISABLED " : "") . ">\n";
-                echo "<OPTION value=\"1\">" . $GLOBALS["messages"]["miscyesno"][0] . "</OPTION>";
-                echo "<OPTION value=\"0\"" . ($data[7] ? "" : " selected ") . ">";
-                echo $GLOBALS["messages"]["miscyesno"][1] . "</OPTION>\n";
-                echo "</SELECT></TD></TR>\n";
-                echo "<TR><TD colspan=\"2\" align=\"right\"><input type=\"submit\" value=\"" . $GLOBALS["messages"]["btnsave"];
-                echo "\" onClick=\"return check_pwd();\">\n<input type=\"button\" value=\"";
-                echo $GLOBALS["messages"]["btncancel"] . "\" onClick=\"javascript:location='";
-                echo make_link("admin", $dir, NULL) . "';\"></TD></TR></FORM></TABLE><BR>\n";
+                echo <<<HTML
+                        </td></tr>
+                        <tr>
+                            <td>{$lbl_active}:</td>
+                            <td align="right"><select name="active"{$disabled}>
+                                <option value="1">{$opt_yes}</option>
+                                <option value="0"{$sel_inactive}>{$opt_no}</option>
+                            </select></td>
+                        </tr>
+                        <tr><td colspan="2" align="right">
+                            <input type="submit" value="{$btn_save}" onclick="return check_pwd();">
+                            <input type="button" value="{$btn_cancel}" onclick="location='{$cancel_link}';">
+                        </td></tr>
+                    </form>
+                </table>
+                <br>
+                HTML;
             }
 
             /**
@@ -386,21 +457,23 @@ function admin($admin, $dir)
             function admin_print_permissions($username)
             {
                 $permvalues = permissions_get();
-                echo "<TABLE>";
+                echo "<table>\n";
                 foreach ($permvalues as $name => $value)
                 {
-                    // determine wether the option is already set
-                    $checked = permissions_grant_user($username, NULL, NULL, $name) ? "checked" : "";
-                    $disabled = (($username == "admin") && ($name == "admin")) ? "disabled" : "";
-                    $desc = $GLOBALS["messages"]["miscpermissions"][$name][0];
-                    $tooltip = $GLOBALS["messages"]["miscpermissions"][$name][1];
-                    echo "<TR><TD>\n";
-                    echo "\t\t<INPUT type=\"checkbox\" title=\"$tooltip\" name=\"permsettings[]\" value=\"$value\" $checked $disabled >\n";
-                    echo isset($desc) ? $desc : $name;
-                    echo "</INPUT>";
-                    echo "</TR></TD>";
+                    $checked  = permissions_grant_user($username, NULL, NULL, $name) ? " checked" : "";
+                    $disabled = (($username == "admin") && ($name == "admin")) ? " disabled" : "";
+                    $desc     = $GLOBALS["messages"]["miscpermissions"][$name][0] ?? $name;
+                    $tooltip  = htmlspecialchars($GLOBALS["messages"]["miscpermissions"][$name][1] ?? '', ENT_QUOTES, 'UTF-8');
+                    $val_enc  = htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+
+                    echo <<<HTML
+                    <tr><td>
+                        <input type="checkbox" title="{$tooltip}" name="permsettings[]" value="{$val_enc}"{$checked}{$disabled}>
+                        {$desc}
+                    </td></tr>
+                    HTML;
                 }
-                echo "</TABLE>";
+                echo "</table>\n";
             }
 
             /**

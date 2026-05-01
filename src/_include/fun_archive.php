@@ -158,30 +158,57 @@ function archive_items($dir)
     }
 
     show_header($GLOBALS["messages"]["actarchive"]);
-    echo "<BR><FORM name=\"archform\" method=\"post\" action=\"" . make_link("arch", $dir, NULL) . "\">\n";
 
+    $arch_link   = make_link("arch", $dir, NULL);
+    $list_link   = make_link("list", $dir, NULL);
+    $btn_create  = htmlspecialchars($GLOBALS["messages"]["btncreate"], ENT_QUOTES, 'UTF-8');
+    $btn_cancel  = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
+    $lbl_name    = $GLOBALS["messages"]["nameheader"];
+    $lbl_type    = $GLOBALS["messages"]["typeheader"];
+
+    // Hidden inputs for selected items
+    $hidden_items = "";
     $cnt = count($GLOBALS['__POST']["selitems"]);
     for ($i = 0; $i < $cnt; ++$i)
     {
-        echo "<INPUT type=\"hidden\" name=\"selitems[]\" value=\"" . htmlspecialchars($GLOBALS['__POST']["selitems"][$i]) . "\">\n";
+        $val = htmlspecialchars($GLOBALS['__POST']["selitems"][$i], ENT_QUOTES, 'UTF-8');
+        $hidden_items .= "        <input type=\"hidden\" name=\"selitems[]\" value=\"{$val}\">\n";
     }
 
-    echo "<TABLE width=\"300\"><TR><TD>" . $GLOBALS["messages"]["nameheader"] . ":</TD><TD align=\"right\">";
-    echo "<INPUT type=\"text\" name=\"name\" size=\"25\"></TD></TR>\n";
-    echo "<TR><TD>" . $GLOBALS["messages"]["typeheader"] . ":</TD><TD align=\"right\"><SELECT name=\"type\">\n";
-    if ($GLOBALS["zip"]) echo "<OPTION value=\"zip\">Zip</OPTION>\n";
-    if ($GLOBALS["tar"]) echo "<OPTION value=\"tar\">Tar</OPTION>\n";
-    if ($GLOBALS["tgz"]) echo "<OPTION value=\"tgz\">TGz</OPTION>\n";
-    echo "</SELECT></TD></TR>";
-    echo "<TR><TD></TD><TD align=\"right\"><INPUT type=\"submit\" value=\"" . $GLOBALS["messages"]["btncreate"] . "\">\n";
-    echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btncancel"];
-    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL) . "';\">\n</TD></TR></FORM></TABLE><BR>\n";
-?><script language="JavaScript1.2" type="text/javascript">
-        <!--
+    // Type options
+    $type_options = "";
+    if ($GLOBALS["zip"]) $type_options .= "            <option value=\"zip\">Zip</option>\n";
+    if ($GLOBALS["tar"]) $type_options .= "            <option value=\"tar\">Tar</option>\n";
+    if ($GLOBALS["tgz"]) $type_options .= "            <option value=\"tgz\">TGz</option>\n";
+
+    echo <<<HTML
+    <br>
+    <form name="archform" method="post" action="{$arch_link}">
+    {$hidden_items}
+        <table width="300">
+            <tr>
+                <td>{$lbl_name}:</td>
+                <td align="right"><input type="text" name="name" size="25"></td>
+            </tr>
+            <tr>
+                <td>{$lbl_type}:</td>
+                <td align="right">
+                    <select name="type">
+    {$type_options}                </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="right">
+                    <input type="submit" value="{$btn_create}">
+                    <input type="button" value="{$btn_cancel}" onclick="location='{$list_link}';">
+                </td>
+            </tr>
+        </form>
+        </table>
+        <br>
+    <script>
         if (document.archform) document.archform.name.focus();
-        // 
-        -->
-    </script><?php
-            }
-            //------------------------------------------------------------------------------
-                ?>
+    </script>
+    HTML;
+}

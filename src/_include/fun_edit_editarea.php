@@ -81,69 +81,62 @@ function edit_file($dir, $item)
     if (strlen($s_item) > 50) $s_item = "..." . substr($s_item, -47);
     show_header($GLOBALS["messages"]["actedit"] . ": /" . htmlspecialchars($s_item));
 
-    // Wordwrap (works only in IE)
-?><script language="JavaScript1.2" type="text/javascript">
-        <!--
-        function chwrap() {
-            if (document.editfrm.wrap.checked) {
-                document.editfrm.code.wrap = "soft";
-            } else {
-                document.editfrm.code.wrap = "off";
-            }
-        }
-        // 
-        -->
-    </script>
-
-    <script language="Javascript" type="text/javascript">
-        // initialisation
-        editAreaLoader.init({
-            id: "txtedit" // id of the textarea to transform
-                ,
-            start_highlight: true // if start with highlight
-                ,
-            allow_resize: "both"
-                //,min_width = 400
-                //,min_height = 100
-                //,allow_resize: "y"
-                ,
-            allow_toggle: true,
-            word_wrap: true,
-            language: "<?php echo $GLOBALS["language"]; ?>",
-            syntax: "<?php echo get_mime_type($dir, $item, "ext"); ?>"
-        });
-    </script>
-
-    <?php
-
-    // Form
-    echo "<BR><FORM name=\"editfrm\" method=\"post\" action=\"" . make_link("edit", $dir, $item) . "\">\n";
-    echo "<input type=\"hidden\" name=\"dosave\" value=\"yes\">\n";
-    echo "<TEXTAREA NAME=\"code\" ID=\"txtedit\" rows=\"25\" cols=\"120\" wrap=\"off\">";
-
-    // Show File In TextArea
+    // Read file contents
     $buffer = "";
     while (!feof($fp))
     {
         $buffer .= fgets($fp, 4096);
     }
     @fclose($fp);
-    echo htmlspecialchars($buffer);
-    //echo $buffer;
 
-    echo "</TEXTAREA><BR>\n<TABLE><TR><TD>Wordwrap: (IE only)</TD><TD><INPUT type=\"checkbox\" name=\"wrap\" ";
-    echo "onClick=\"javascript:chwrap();\" value=\"1\"></TD></TR></TABLE><BR>\n";
-    echo "<TABLE><TR><TD><INPUT type=\"text\" name=\"fname\" value=\"" . htmlspecialchars($item) . "\"></TD>";
-    echo "<TD><input type=\"submit\" value=\"" . $GLOBALS["messages"]["btnsave"];
-    echo "\"></TD>\n<TD><input type=\"reset\" value=\"" . $GLOBALS["messages"]["btnreset"] . "\"></TD>\n<TD>";
-    echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btnclose"] . "\" onClick=\"javascript:location='";
-    echo make_link("list", $dir, NULL) . "';\"></TD></TR></FORM></TABLE><BR>\n";
-    ?><script language="JavaScript1.2" type="text/javascript">
-        <!--
+    // Pre-compute values for output
+    $language     = htmlspecialchars($GLOBALS["language"], ENT_QUOTES, 'UTF-8');
+    $syntax       = htmlspecialchars(get_mime_type($dir, $item, "ext"), ENT_QUOTES, 'UTF-8');
+    $form_action  = make_link("edit", $dir, $item);
+    $list_link    = make_link("list", $dir, NULL);
+    $item_encoded = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
+    $code_encoded = htmlspecialchars($buffer, ENT_QUOTES, 'UTF-8');
+    $btn_save     = htmlspecialchars($GLOBALS["messages"]["btnsave"], ENT_QUOTES, 'UTF-8');
+    $btn_reset    = htmlspecialchars($GLOBALS["messages"]["btnreset"], ENT_QUOTES, 'UTF-8');
+    $btn_close    = htmlspecialchars($GLOBALS["messages"]["btnclose"], ENT_QUOTES, 'UTF-8');
+
+    echo <<<HTML
+    <script>
+        editAreaLoader.init({
+            id:              "txtedit",
+            start_highlight: true,
+            allow_resize:    "both",
+            allow_toggle:    true,
+            word_wrap:       true,
+            language:        "{$language}",
+            syntax:          "{$syntax}"
+        });
+
+        function toggleWrap() {
+            var ta = document.editfrm.code;
+            ta.wrap = ta.wrap === "off" ? "soft" : "off";
+        }
+    </script>
+    <br>
+    <form name="editfrm" method="post" action="{$form_action}">
+        <input type="hidden" name="dosave" value="yes">
+        <textarea name="code" id="txtedit" rows="25" cols="120" wrap="off">{$code_encoded}</textarea>
+        <br>
+        <label><input type="checkbox" onclick="toggleWrap();"> Wordwrap</label>
+        <br>
+        <table>
+            <tr>
+                <td><input type="text" name="fname" value="{$item_encoded}"></td>
+                <td><input type="submit" value="{$btn_save}"></td>
+                <td><input type="reset" value="{$btn_reset}"></td>
+                <td><input type="button" value="{$btn_close}" onclick="location='{$list_link}';"></td>
+            </tr>
+        </form>
+        </table>
+    <script>
         if (document.editfrm) document.editfrm.code.focus();
-        // 
-        -->
-    </script><?php
-            }
-            //------------------------------------------------------------------------------
-                ?>
+    </script>
+    HTML;
+}
+//------------------------------------------------------------------------------
+?>

@@ -51,24 +51,35 @@ function show_header($title, $additional_header_content = null)
     header("Pragma: no-cache");
     header("Content-Type: text/html; charset=" . $GLOBALS["charset"]);
 
-    //echo "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"";
-    //echo "\"http://www.w3.org/TR/REC-html40/loose.dtd\">\n";
-    echo "<html lang=\"" . $GLOBALS["language"] . "\" dir=\"" . $GLOBALS["text_dir"] . "\">\n";
-    echo "<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" . $GLOBALS["charset"] . "\">\n";
-    echo "<title>" . htmlspecialchars($site_name, ENT_QUOTES, 'UTF-8') . "</title>\n";
-    echo "<link href=\"_style/style.css\" rel=\"stylesheet\" type=\"text/css\">\n";
+    $lang       = htmlspecialchars($GLOBALS["language"], ENT_QUOTES, 'UTF-8');
+    $dir        = htmlspecialchars($GLOBALS["text_dir"], ENT_QUOTES, 'UTF-8');
+    $charset    = htmlspecialchars($GLOBALS["charset"], ENT_QUOTES, 'UTF-8');
+    $site_title = htmlspecialchars($site_name, ENT_QUOTES, 'UTF-8');
+    $user_info  = "";
+    if ($GLOBALS["require_login"] && isset($GLOBALS['__SESSION']["s_user"]))
+        $user_info = "[" . htmlspecialchars($GLOBALS['__SESSION']["s_user"], ENT_QUOTES, 'UTF-8') . "] - ";
 
-    echo "<link href=\"_lib/uploadify/uploadify.css\" type=\"text/css\" rel=\"stylesheet\" />\n";
-
-    echo "<script type=\"text/javascript\" src=\"_lib/edit_area/edit_area_full.js\"></script>\n";
-    echo "<script type=\"text/javascript\" src=\"_lib/jquery/jquery.min.js\"></script>\n";
+    echo <<<HTML
+    <html lang="{$lang}" dir="{$dir}">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset={$charset}">
+        <title>{$site_title}</title>
+        <link href="_style/style.css" rel="stylesheet" type="text/css">
+        <link href="_lib/uploadify/uploadify.css" type="text/css" rel="stylesheet">
+        <script type="text/javascript" src="_lib/edit_area/edit_area_full.js"></script>
+        <script type="text/javascript" src="_lib/jquery/jquery.min.js"></script>
+    HTML;
 
     if ($additional_header_content != null)
         echo $additional_header_content;
 
-    echo "</head>\n<body><center>\n<table border=\"0\" width=\"100%\" cellspacing=\"0\" cellpadding=\"5\"><tbody>\n";
-    echo "<tr><td class=\"title\">";
-    if ($GLOBALS["require_login"] && isset($GLOBALS['__SESSION']["s_user"])) echo "[" . htmlspecialchars($GLOBALS['__SESSION']["s_user"]) . "] - ";
-    echo $title . "</td></tr></tbody></table>\n\n";
+    echo <<<HTML
+    </head>
+    <body><center>
+    <table border="0" width="100%" cellspacing="0" cellpadding="5"><tbody>
+        <tr><td class="title">{$user_info}{$title}</td></tr>
+    </tbody></table>
+
+    HTML;
 }
 //------------------------------------------------------------------------------

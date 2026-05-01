@@ -71,19 +71,22 @@ function dir_print($dir_list, $new_dir)
     $dir_up = dirname($new_dir);
     if ($dir_up == ".") $dir_up = "";
 
-    echo "<TR><TD><A HREF=\"javascript:NewDir('" . addslashes($dir_up);
-    echo "');\"><IMG border=\"0\" width=\"16\" height=\"16\"";
-    echo " align=\"ABSMIDDLE\" src=\"" . $GLOBALS["baricons"]["up"] . "\" ALT=\"\">&nbsp;..</A></TD></TR>\n";
+    $up_icon = $GLOBALS["baricons"]["up"];
+    $dir_up_js = addslashes($dir_up);
+    echo <<<HTML
+    <tr><td><a href="javascript:NewDir('{$dir_up_js}');"><img border="0" width="16" height="16" align="absmiddle" src="{$up_icon}" alt="">&nbsp;..</a></td></tr>
+    HTML;
 
     // Print List Of Target Directories
     if (!is_array($dir_list)) return;
     foreach ($dir_list as $new_item => $unused)
     {
-        $s_item = $new_item;
-        if (strlen($s_item) > 40) $s_item = substr($s_item, 0, 37) . "...";
-        echo "<TR><TD><A HREF=\"javascript:NewDir('" . addslashes(get_rel_item($new_dir, $new_item)) .
-            "');\"><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" " .
-            "src=\"_img/dir.gif\" ALT=\"\">&nbsp;" . htmlspecialchars($s_item) . "</A></TD></TR>\n";
+        $s_item   = strlen($new_item) > 40 ? substr($new_item, 0, 37) . "..." : $new_item;
+        $rel_js   = addslashes(get_rel_item($new_dir, $new_item));
+        $s_enc    = htmlspecialchars($s_item, ENT_QUOTES, 'UTF-8');
+        echo <<<HTML
+        <tr><td><a href="javascript:NewDir('{$rel_js}');"><img border="0" width="16" height="16" align="absmiddle" src="_img/dir.gif" alt="">&nbsp;{$s_enc}</a></td></tr>
+        HTML;
     }
 }
 //------------------------------------------------------------------------------
@@ -130,59 +133,64 @@ function unzip_item($dir)
     {
         show_header($GLOBALS["messages"]["actunzipitem"]);
 
-        // JavaScript for Form:
-        // Select new target directory / execute action
-?><script language="JavaScript1.2" type="text/javascript">
-            <!--
+        $post_link    = make_link("post", $dir, NULL);
+        $list_link    = make_link("list", $dir, NULL);
+        $action_val   = htmlspecialchars($GLOBALS["action"], ENT_QUOTES, 'UTF-8');
+        $new_dir_enc  = htmlspecialchars($new_dir, ENT_QUOTES, 'UTF-8');
+        $item_enc     = htmlspecialchars($s_item, ENT_QUOTES, 'UTF-8');
+        $item_disp    = htmlspecialchars($s_item, ENT_QUOTES, 'UTF-8');
+        $zip_icon     = $GLOBALS["baricons"]["zip"];
+        $unzipto_icon = $GLOBALS["baricons"]["unzipto"];
+        $btn_unzip    = htmlspecialchars($GLOBALS["messages"]["btnunzip"], ENT_QUOTES, 'UTF-8');
+        $btn_cancel   = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
+        $dirextr_enc  = htmlspecialchars($dir_extract, ENT_QUOTES, 'UTF-8');
+        $zipname_enc  = htmlspecialchars($zip_name, ENT_QUOTES, 'UTF-8');
+
+        echo <<<HTML
+        <script>
             function NewDir(newdir) {
                 document.selform.new_dir.value = newdir;
                 document.selform.submit();
             }
-
             function Execute() {
                 document.selform.confirm.value = "true";
             }
-            //
-            -->
-        </script><?php
+        </script>
+        <!-- dirextr = {$dirextr_enc} -->
+        <!-- zipname = {$zipname_enc} -->
+        <br>
+        <img src="{$_img}" align="absmiddle" alt="">&nbsp;<img src="{$unzipto_icon}" align="absmiddle" alt="">
+        <br><br>
+        <form name="selform" method="post" action="{$post_link}">
+            <input type="hidden" name="do_action" value="{$action_val}">
+            <input type="hidden" name="confirm" value="false">
+            <input type="hidden" name="new_dir" value="{$new_dir_enc}">
+            <table>
+        HTML;
 
-                    // "Copy / Move from .. to .."
-                    $s_dir = $dir;
-                    if (strlen($s_dir) > 40) $s_dir = "..." . substr($s_dir, -37);
-                    $s_ndir = $new_dir;
-                    if (strlen($s_ndir) > 40) $s_ndir = "..." . substr($s_ndir, -37);
-                    echo "<!-- dirextr = " . htmlspecialchars($dir_extract) . " -->\n";
-                    echo "<!-- zipname = " . htmlspecialchars($zip_name) . " -->\n";
-                    echo "<BR><IMG SRC=\"" . $_img . "\" align=\"ABSMIDDLE\" ALT=\"\">&nbsp;";
-                    echo "<IMG SRC=\"" . $GLOBALS["baricons"]["unzipto"] . "\" align=\"ABSMIDDLE\" ALT=\"\">\n";
+        dir_print(dir_list($new_dir), $new_dir);
 
-                    // Form for Target Directory & New Names
-                    echo "<BR><BR><FORM name=\"selform\" method=\"post\" action=\"";
-                    echo make_link("post", $dir, NULL) . "\"><TABLE>\n";
-                    echo "<INPUT type=\"hidden\" name=\"do_action\" value=\"" . $GLOBALS["action"] . "\">\n";
-                    echo "<INPUT type=\"hidden\" name=\"confirm\" value=\"false\">\n";
-                    //echo "<INPUT type=\"hidden\" name=\"dir\" value=\"n\">\n";
-                    echo "<INPUT type=\"hidden\" name=\"new_dir\" value=\"" . htmlspecialchars($new_dir) . "\">\n";
-
-                    // List Directories to select Target
-                    dir_print(dir_list($new_dir), $new_dir);
-                    echo "</TABLE><BR><TABLE>\n";
-
-                    // Print Text Inputs to change Names
-
-                    echo "<TR><TD><IMG SRC=\"" . $GLOBALS["baricons"]["zip"] . "\" align=\"ABSMIDDLE\" ALT=\"\">";
-                    echo "<INPUT type=\"hidden\" name=\"item\" value=\"" . htmlspecialchars($s_item) . "\">&nbsp;" . htmlspecialchars($s_item) . "&nbsp;";
-
-                    // Submit & Cancel
-                    echo "</TABLE><BR><TABLE><TR>\n<TD>";
-                    echo "<INPUT type=\"submit\" value=\"";
-                    echo $GLOBALS["messages"]["btnunzip"];
-                    echo "\" onclick=\"javascript:Execute();\"></TD>\n<TD>";
-                    echo "<input type=\"button\" value=\"" . $GLOBALS["messages"]["btncancel"];
-                    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL);
-                    echo "';\"></TD>\n</TR></FORM></TABLE><BR>\n";
-                    return;
-                }
+        echo <<<HTML
+            </table>
+            <br>
+            <table>
+                <tr><td>
+                    <img src="{$zip_icon}" align="absmiddle" alt="">
+                    <input type="hidden" name="item" value="{$item_enc}">&nbsp;{$item_disp}&nbsp;
+                </td></tr>
+            </table>
+            <br>
+            <table>
+                <tr>
+                    <td><input type="submit" value="{$btn_unzip}" onclick="Execute();"></td>
+                    <td><input type="button" value="{$btn_cancel}" onclick="location='{$list_link}';"></td>
+                </tr>
+            </form>
+            </table>
+            <br>
+        HTML;
+        return;
+        }
 
                 // DO COPY/MOVE
 
@@ -259,28 +267,10 @@ function unzip_item($dir)
                     extArchive::extract($zip_name, $dir_extract);
                 }
 
-                // FIXME $i is not set anymore.. remove code?
-                if (!isset($i))
-                    $i = 0;
-                if ($res == false)
+                // FIXME: $res may be unset if non-zip extracted via extArchive without returning a value
+                if (isset($res) && $res === false)
                 {
-                    $error[$i] = $GLOBALS["error_msg"]["unzip"];
-                    $err = true;
-                    continue;
-                }
-
-                $error[$i] = NULL;
-
-                if ($err)
-                {            // there were errors
-                    $err_msg = "";
-                    for ($i = 0; $i < $cnt; ++$i)
-                    {
-                        if ($error[$i] == NULL) continue;
-
-                        $err_msg .= $items[$i] . " : " . $error[$i] . "<BR>\n";
-                    }
-                    show_error($err_msg);
+                    show_error($GLOBALS["error_msg"]["unzip"]);
                 }
 
                 header("Location: " . make_link("list", $dir, NULL));

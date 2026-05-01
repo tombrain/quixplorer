@@ -124,19 +124,38 @@ function upload_items($dir)
 
     show_header($GLOBALS["messages"]["actupload"]);
 
-    // List
-    echo "<BR><FORM enctype=\"multipart/form-data\" action=\"" . make_link("upload", $dir, NULL);
-    echo "\" method=\"post\">\n<INPUT type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"";
-    echo get_max_file_size() . "\"><INPUT type=\"hidden\" name=\"confirm\" value=\"true\"><TABLE>\n";
+    $upload_link = make_link("upload", $dir, NULL);
+    $list_link   = make_link("list", $dir, NULL);
+    $max_size    = get_max_file_size();
+    $btn_upload  = htmlspecialchars($GLOBALS["messages"]["btnupload"], ENT_QUOTES, 'UTF-8');
+    $btn_cancel  = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
+
+    // Build file input rows
+    $file_inputs = "";
     $filecount = 10;
     for ($ii = 0; $ii < $filecount; $ii++)
-    {
-        echo "<TR><TD nowrap align=\"center\">";
-        echo "<INPUT name=\"userfile[]\" type=\"file\" size=\"40\"></TD></TR>\n";
-    }
-    echo "</TABLE>\n<BR><TABLE><TR><TD><INPUT type=\"submit\" value=\"" . $GLOBALS["messages"]["btnupload"];
-    echo "\"></TD>\n<TD><input type=\"button\" value=\"" . $GLOBALS["messages"]["btncancel"];
-    echo "\" onClick=\"javascript:location='" . make_link("list", $dir, NULL) . "';\">\n</TD></TR></FORM></TABLE><BR>\n";
+        $file_inputs .= "            <tr><td nowrap align=\"center\"><input name=\"userfile[]\" type=\"file\" size=\"40\"></td></tr>\n";
+
+    echo <<<HTML
+    <br>
+    <form enctype="multipart/form-data" action="{$upload_link}" method="post">
+        <input type="hidden" name="MAX_FILE_SIZE" value="{$max_size}">
+        <input type="hidden" name="confirm" value="true">
+        <table>
+    HTML;
+    echo $file_inputs;
+    echo <<<HTML
+        </table>
+        <br>
+        <table>
+            <tr>
+                <td><input type="submit" value="{$btn_upload}"></td>
+                <td><input type="button" value="{$btn_cancel}" onclick="location='{$list_link}';"></td>
+            </tr>
+        </form>
+        </table>
+        <br>
+    HTML;
 
     return;
 }

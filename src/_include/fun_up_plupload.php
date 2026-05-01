@@ -187,23 +187,20 @@ function upload_items($dir)
     </script>
 
 <?php
-    // List
-    echo "<BR><FORM enctype=\"multipart/form-data\" action=\"" . make_link("upload", $dir, NULL);
-    echo "\" method=\"post\">\n";
+    $upload_link = make_link("upload", $dir, NULL);
+    $list_link   = make_link("list",   $dir, NULL);
 
-    echo "<TR><TD nowrap align=\"center\">\n";
-    echo "<div id=\"uploader\" style=\"height: 330px;\">\n";
-    echo "    <p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>\n";
-    echo "</div>\n";
-
-    echo "</TD></TR>\n";
-
-    //echo "<input id=\"file_upload\" name=\"file_upload\" type=\"file\" />\n";
-
-    echo "</TABLE>\n<BR><TABLE><TR><TD><INPUT type=\"submit\" value=\"Listo\"";
-    echo "\"></TD></TR></FORM></TABLE><BR>\n";
-    //    echo "\"></TD>\n<TD><input type=\"button\" value=\"".$GLOBALS["messages"]["btncancel"];
-    //    echo "\" onClick=\"javascript:location='".make_link("list",$dir,NULL)."';\">\n</TD></TR></FORM></TABLE><BR>\n";
+    echo <<<HTML
+    <br>
+    <form enctype="multipart/form-data" action="{$upload_link}" method="post">
+        <tr><td nowrap align="center">
+            <div id="uploader" style="height: 330px;">
+                <p>Your browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
+            </div>
+        </td></tr>
+    </form>
+    <br>
+    HTML;
 
     return;
 }

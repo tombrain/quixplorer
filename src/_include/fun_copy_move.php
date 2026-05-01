@@ -58,24 +58,27 @@ function dir_list($dir) {            // make list of directories
     return $dir_list;
 }
 //------------------------------------------------------------------------------
-function dir_print($dir_list, $new_dir) {    // print list of directories
-    // this list is used to copy/move items to a specific location
-
-    // Link to Parent Directory
+function dir_print($dir_list, $new_dir) {
     $dir_up = dirname($new_dir);
-    if($dir_up==".") $dir_up = "";
+    if ($dir_up == ".") $dir_up = "";
 
-    echo "<TR><TD><A HREF=\"javascript:NewDir('".addslashes($dir_up);
-    echo "');\"><IMG border=\"0\" width=\"16\" height=\"16\"";
-    echo " align=\"ABSMIDDLE\" src=\"".$GLOBALS["baricons"]["up"]."\" ALT=\"\">&nbsp;..</A></TD></TR>\n";
+    $up_icon = $GLOBALS["baricons"]["up"];
+    $up_link = addslashes($dir_up);
 
-    // Print List Of Target Directories
-    if(!is_array($dir_list)) return;
-    foreach($dir_list as $new_item => $unused) {
-        $s_item=$new_item;    if(strlen($s_item)>40) $s_item=substr($s_item,0,37)."...";
-        echo "<TR><TD><A HREF=\"javascript:NewDir('".addslashes(get_rel_item($new_dir,$new_item)).
-            "');\"><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" ".
-            "src=\"_img/dir.gif\" ALT=\"\">&nbsp;".htmlspecialchars($s_item)."</A></TD></TR>\n";
+    echo <<<HTML
+    <tr><td><a href="javascript:NewDir('{$up_link}');"><img width="16" height="16" align="absmiddle" src="{$up_icon}" alt="">&nbsp;..</a></td></tr>
+    HTML;
+
+    if (!is_array($dir_list)) return;
+    foreach ($dir_list as $new_item => $unused)
+    {
+        $s_item   = strlen($new_item) > 40 ? substr($new_item, 0, 37) . "..." : $new_item;
+        $rel_path = addslashes(get_rel_item($new_dir, $new_item));
+        $s_enc    = htmlspecialchars($s_item, ENT_QUOTES, 'UTF-8');
+
+        echo <<<HTML
+        <tr><td><a href="javascript:NewDir('{$rel_path}');"><img width="16" height="16" align="absmiddle" src="_img/dir.gif" alt="">&nbsp;{$s_enc}</a></td></tr>
+        HTML;
     }
 }
 //------------------------------------------------------------------------------
@@ -113,68 +116,85 @@ function copy_move_items ($dir)
 
         show_header($msg);
 
-        // JavaScript for Form:
-        // Select new target directory / execute action
-?>
-<script language="JavaScript1.2" type="text/javascript">
-<!--
-    function NewDir(newdir) {
-        document.selform.new_dir.value = newdir;
-        document.selform.submit();
-    }
+        $s_dir  = strlen($dir)     > 40 ? "..." . substr($dir, -37)     : $dir;
+        $s_ndir = strlen($new_dir) > 40 ? "..." . substr($new_dir, -37) : $new_dir;
+        $action_msg  = $GLOBALS["action"] != "move"
+            ? $GLOBALS["messages"]["actcopyfrom"]
+            : $GLOBALS["messages"]["actmovefrom"];
+        $from_to     = htmlspecialchars(sprintf($action_msg, $s_dir, $s_ndir), ENT_QUOTES, 'UTF-8');
+        $post_link   = make_link("post", $dir, NULL);
+        $list_link   = make_link("list", $dir, NULL);
+        $action_val  = htmlspecialchars($GLOBALS["action"], ENT_QUOTES, 'UTF-8');
+        $new_dir_enc = htmlspecialchars($new_dir, ENT_QUOTES, 'UTF-8');
+        $btn_action  = $GLOBALS["action"] != "move"
+            ? htmlspecialchars($GLOBALS["messages"]["btncopy"], ENT_QUOTES, 'UTF-8')
+            : htmlspecialchars($GLOBALS["messages"]["btnmove"], ENT_QUOTES, 'UTF-8');
+        $btn_cancel  = htmlspecialchars($GLOBALS["messages"]["btncancel"], ENT_QUOTES, 'UTF-8');
 
-    function Execute() {
-        document.selform.confirm.value = "true";
-    }
-//-->
-</script>
-<?php
+        echo <<<HTML
+        <script>
+            function NewDir(newdir) {
+                document.selform.new_dir.value = newdir;
+                document.selform.submit();
+            }
+            function Execute() {
+                document.selform.confirm.value = "true";
+            }
+        </script>
+        <br>
+        <img src="{$_img}" align="absmiddle" alt="">&nbsp;{$from_to}
+        <img src="_img/__paste.gif" align="absmiddle" alt="">
+        <br><br>
+        <form name="selform" method="post" action="{$post_link}">
+            <input type="hidden" name="do_action" value="{$action_val}">
+            <input type="hidden" name="confirm" value="false">
+            <input type="hidden" name="first" value="n">
+            <input type="hidden" name="new_dir" value="{$new_dir_enc}">
+            <table>
+        HTML;
 
-        // "Copy / Move from .. to .."
-        $s_dir=$dir;        if(strlen($s_dir)>40) $s_dir="...".substr($s_dir,-37);
-        $s_ndir=$new_dir;    if(strlen($s_ndir)>40) $s_ndir="...".substr($s_ndir,-37);
-        echo "<BR><IMG SRC=\"".$_img."\" align=\"ABSMIDDLE\" ALT=\"\">&nbsp;";
-        echo htmlspecialchars(sprintf(($GLOBALS["action"]!="move"?$GLOBALS["messages"]["actcopyfrom"]:
-            $GLOBALS["messages"]["actmovefrom"]),$s_dir, $s_ndir));
-        echo "<IMG SRC=\"_img/__paste.gif\" align=\"ABSMIDDLE\" ALT=\"\">\n";
+        dir_print(dir_list($new_dir), $new_dir);
 
-        // Form for Target Directory & New Names
-        echo "<BR><BR><FORM name=\"selform\" method=\"post\" action=\"";
-        echo make_link("post",$dir,NULL)."\"><TABLE>\n";
-        echo "<INPUT type=\"hidden\" name=\"do_action\" value=\"".$GLOBALS["action"]."\">\n";
-        echo "<INPUT type=\"hidden\" name=\"confirm\" value=\"false\">\n";
-        echo "<INPUT type=\"hidden\" name=\"first\" value=\"n\">\n";
-        echo "<INPUT type=\"hidden\" name=\"new_dir\" value=\"".htmlspecialchars($new_dir)."\">\n";
+        echo "        </table>\n        <br>\n        <table>\n";
 
-        // List Directories to select Target
-        dir_print(dir_list($new_dir),$new_dir);
-        echo "</TABLE><BR><TABLE>\n";
+        for ($i = 0; $i < $cnt; ++$i)
+        {
+            $selitem = $GLOBALS['__POST']["selitems"][$i];
+            if (isset($GLOBALS['__POST']["newitems"][$i]))
+            {
+                $newitem = $GLOBALS['__POST']["newitems"][$i];
+                if ($first == "y") $newitem = $selitem;
+            }
+            else $newitem = $selitem;
 
-        // Print Text Inputs to change Names
-        for($i=0;$i<$cnt;++$i) {
-            $selitem=$GLOBALS['__POST']["selitems"][$i];
-            if(isset($GLOBALS['__POST']["newitems"][$i])) {
-                $newitem=$GLOBALS['__POST']["newitems"][$i];
-                if($first=="y") $newitem=$selitem;
-            } else $newitem=$selitem;
-            $s_item=$selitem;    if(strlen($s_item)>50) $s_item=substr($s_item,0,47)."...";
-            echo "<TR><TD><IMG SRC=\"_img/_info.gif\" align=\"ABSMIDDLE\" ALT=\"\">";
-            // Old Name
-            echo "<INPUT type=\"hidden\" name=\"selitems[]\" value=\"";
-            echo htmlspecialchars($selitem)."\">&nbsp;".htmlspecialchars($s_item)."&nbsp;";
-            // New Name
-            echo "</TD><TD><INPUT type=\"text\" size=\"25\" name=\"newitems[]\" value=\"";
-            echo htmlspecialchars($newitem)."\"></TD></TR>\n";
+            $s_item     = strlen($selitem) > 50 ? substr($selitem, 0, 47) . "..." : $selitem;
+            $sel_enc    = htmlspecialchars($selitem, ENT_QUOTES, 'UTF-8');
+            $s_enc      = htmlspecialchars($s_item, ENT_QUOTES, 'UTF-8');
+            $new_enc    = htmlspecialchars($newitem, ENT_QUOTES, 'UTF-8');
+
+            echo <<<HTML
+                <tr>
+                    <td><img src="_img/_info.gif" align="absmiddle" alt="">
+                        <input type="hidden" name="selitems[]" value="{$sel_enc}">&nbsp;{$s_enc}&nbsp;
+                    </td>
+                    <td><input type="text" size="25" name="newitems[]" value="{$new_enc}"></td>
+                </tr>
+            HTML;
         }
 
-        // Submit & Cancel
-        echo "</TABLE><BR><TABLE><TR>\n<TD>";
-        echo "<INPUT type=\"submit\" value=\"";
-        echo ($GLOBALS["action"]!="move"?$GLOBALS["messages"]["btncopy"]:$GLOBALS["messages"]["btnmove"]);
-        echo "\" onclick=\"javascript:Execute();\"></TD>\n<TD>";
-        echo "<input type=\"button\" value=\"".$GLOBALS["messages"]["btncancel"];
-        echo "\" onClick=\"javascript:location='".make_link("list",$dir,NULL);
-        echo "';\"></TD>\n</TR></FORM></TABLE><BR>\n";
+        echo <<<HTML
+        </table>
+        <br>
+        <table>
+            <tr>
+                <td><input type="submit" value="{$btn_action}" onclick="Execute();"></td>
+                <td><input type="button" value="{$btn_cancel}" onclick="location='{$list_link}';"></td>
+            </tr>
+        </form>
+        </table>
+        <br>
+        HTML;
+
         return;
     }
 

@@ -26,6 +26,10 @@ function show_login()
 {
     if (login_is_user_logged_in())
         return;
-    echo '<small> - <a href="' . make_link("login", NULL) . '">' . $GLOBALS['messages']['btnlogin'] . "</a></small>";
+    $login_link  = make_link("login", NULL);
+    $btn_login   = htmlspecialchars($GLOBALS['messages']['btnlogin'], ENT_QUOTES, 'UTF-8');
+    echo <<<HTML
+    <small> - <a href="{$login_link}">{$btn_login}</a></small>
+    HTML;
 }
 ?>
