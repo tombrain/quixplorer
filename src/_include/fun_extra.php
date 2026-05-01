@@ -2,7 +2,6 @@
 
 require_once "_include/session.php";
 require_once "_include/qxpath.php";
-require_once "_include/str.php";
 
 //------------------------------------------------------------------------------
 // THESE ARE NUMEROUS HELPER FUNCTIONS FOR THE OTHER INCLUDE FILES
