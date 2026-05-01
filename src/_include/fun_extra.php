@@ -137,9 +137,28 @@ function get_is_image($dir, $item)
 //-----------------------------------------------------------------------------
 function get_is_editable($dir, $item)
 {        // is this file editable?
+    // Fast path: known extensions (no disk I/O)
+    static $known_ext = '/\.(txt|php[0-9]?|phtml|inc|sql|pl|htm[l]?|s?dhtml|xml|js|css|cgi|c|cc|cpp|cxx|h|hpp|pas|p|java|py|sh|tcl|tk|dxs|uni|json|yaml|yml|toml|ini|conf|env|log|md|ts|jsx|tsx|vue|svelte|rs|go|rb|lua)$|^\.htaccess$|^\.env/i';
+    if (preg_match($known_ext, $item)) return true;
+
+    // Slow path: files without recognised extension — inspect content via finfo
     if (!get_is_file($dir, $item)) return false;
-    foreach ($GLOBALS["editable_ext"] as $pat) if (@preg_match('/' . $pat . '/i', $item)) return true;
-    return false;
+
+    $abs  = get_abs_item($dir, $item);
+    $size = @filesize($abs);
+    if ($size === false || $size > 524288) return false;  // skip files > 512 KB
+    if ($size === 0) return true;                         // empty files: always editable
+
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($abs);
+
+    if (str_starts_with($mime, 'text/')) return true;
+    return in_array($mime, [
+        'application/json',
+        'application/xml',
+        'application/javascript',
+        'application/x-httpd-php',
+        'application/x-sh',
+    ]);
 }
 //-----------------------------------------------------------------------------
 function get_is_unzipable($dir, $item)

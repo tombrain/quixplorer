@@ -91,7 +91,7 @@ function edit_file($dir, $item)
 
     // Pre-compute values for output
     $language     = htmlspecialchars($GLOBALS["language"], ENT_QUOTES, 'UTF-8');
-    $syntax       = htmlspecialchars(get_mime_type($dir, $item, "ext"), ENT_QUOTES, 'UTF-8');
+    $syntax       = htmlspecialchars(get_mime_type($dir, $item, "ext") ?? '', ENT_QUOTES, 'UTF-8');
     $form_action  = make_link("edit", $dir, $item);
     $list_link    = make_link("list", $dir, NULL);
     $item_encoded = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
