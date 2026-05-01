@@ -257,7 +257,7 @@ function get_show_item($directory, $file)
         // determine full path to the file
         $full_path = get_abs_item($directory, $file);
         _debug("full_path: $full_path");
-        if (! str_startswith($full_path, path_f()))
+        if (! str_starts_with($full_path, path_f()))
             return false;
     }
 
